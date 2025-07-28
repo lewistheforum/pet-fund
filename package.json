@@ -33,6 +33,7 @@
     "react-fast-marquee": "^1.6.5",
     "react-hot-toast": "^2.5.1",
     "set-up": "file:",
+    "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
     "usehooks-ts": "^3.1.0"
   },

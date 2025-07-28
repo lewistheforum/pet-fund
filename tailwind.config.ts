@@ -16,6 +16,12 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        "font-1": "var(--font-font-1)",
+        "font-2": "var(--font-font-2)",
+        "font-2-bold": "var(--font-font-2-bold)",
+        "font-2-extra-bold": "var(--font-font-2-extra-bold)",
+      },
       screen: {
         md: "790px",
         "3xl": "1900px",

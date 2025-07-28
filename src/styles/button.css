@@ -1,0 +1,160 @@
+/* From Uiverse.io by kosedagyazilim */
+.button {
+  display: inline-block;
+  padding: 10px 18px;
+  margin: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  background-image: linear-gradient(to bottom, #4aa76c, #3d8a58);
+  border: none;
+  border-radius: 7px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  position: relative;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.button:active {
+  transform: translateY(0px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(to bottom, #3d8a58, #4aa76c);
+}
+
+.button:before,
+.button:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.button:before {
+  top: -3px;
+  left: -3px;
+  border-radius: 7px;
+  border-top: 3px solid #fff;
+  border-left: 3px solid #fff;
+}
+
+.button:after {
+  bottom: -3px;
+  right: -3px;
+  border-radius: 7px;
+  border-bottom: 3px solid #fff;
+  border-right: 3px solid #fff;
+}
+
+/* From Uiverse.io by kosedagyazilim */
+.button-2 {
+  display: inline-block;
+  width: 100%;
+  padding: 10px 18px;
+  margin: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  background-image: linear-gradient(to bottom, #4aa76c, #3d8a58);
+  border: none;
+  border-radius: 7px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  position: relative;
+}
+
+.button-2:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.button-2:active {
+  transform: translateY(0px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(to bottom, #3d8a58, #4aa76c);
+}
+
+.button-2:before,
+.button-2:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.button-2:before {
+  top: -3px;
+  left: -3px;
+  border-radius: 7px;
+  border-top: 3px solid #fff;
+  border-left: 3px solid #fff;
+}
+
+.button-2:after {
+  bottom: -3px;
+  right: -3px;
+  border-radius: 7px;
+  border-bottom: 3px solid #fff;
+  border-right: 3px solid #fff;
+}
+
+/* From Uiverse.io by kosedagyazilim */
+.button-3 {
+  display: inline-block;
+  padding: 10px 18px;
+  width: 100%;
+  margin: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  background-image: linear-gradient(to bottom, #4aa76c, #3d8a58);
+  border: none;
+  border-radius: 7px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  position: relative;
+}
+
+.button-3:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.button-3:active {
+  transform: translateY(0px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(to bottom, #3d8a58, #4aa76c);
+}
+
+.button-3:before,
+.button-3:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.button-3:before {
+  top: -3px;
+  left: -3px;
+  border-radius: 7px;
+  border-top: 3px solid #fff;
+  border-left: 3px solid #fff;
+}
+
+.button-3:after {
+  bottom: -3px;
+  right: -3px;
+  border-radius: 7px;
+  border-bottom: 3px solid #fff;
+  border-right: 3px solid #fff;
+}
