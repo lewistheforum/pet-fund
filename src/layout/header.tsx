@@ -241,7 +241,7 @@ export default function Header() {
     <div className="font-font-2">
       <div>
         <motion.div
-          className="fixed w-full top-0 z-50"
+          className="w-full z-50"
           initial="hidden"
           animate="visible"
           variants={headerVariants}
@@ -382,7 +382,7 @@ export default function Header() {
         </motion.div>
 
         {/* Add padding to content to account for fixed header */}
-        <div style={{ paddingTop: "70px" }}></div>
+        {/* <div style={{ paddingTop: "70px" }}></div> */}
 
         <div className="relative grid grid-cols-12">
           <Image
@@ -397,7 +397,7 @@ export default function Header() {
             <div>{svg.x()}</div>
             <div>{svg.tele()}</div>
           </div>
-          <div className="col-span-12 lg:col-span-6 relative px-5 lg:pl-20 py-10 pt-24">
+          <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pl-20 py-10 pt-24">
             <motion.div
               className="grid grid-cols-1 gap-4 text-lg lg:text-[18px]"
               initial="hidden"
@@ -456,7 +456,7 @@ export default function Header() {
                   [ $PETF: THE BEST CRYPTO PRESALE ]
                 </motion.div>
                 <motion.div
-                  className="mb-1 font-font-2-extra-bold uppercase w-2/3"
+                  className="mb-1 font-font-2-extra-bold uppercase w-full"
                   variants={heroItemVariants}
                 >
                   <span className="text-green-400">$PETF</span> goes beyond the
@@ -465,7 +465,7 @@ export default function Header() {
                 </motion.div>
 
                 <motion.div
-                  className="bg-white text-black rounded-lg p-8 mt-10 w-full lg:w-4/5"
+                  className="bg-white text-black rounded-lg p-8 mt-10 w-full lg:w-full"
                   variants={heroCardVariants}
                   whileHover={{
                     boxShadow: "0px 10px 30px rgba(74, 167, 108, 0.2)",
@@ -473,27 +473,27 @@ export default function Header() {
                     transition: { duration: 0.2 },
                   }}
                 >
-                  <div className="text-green-500 text-3xl font-font-2-bold text-center mb-4 uppercase">
+                  <div className="text-green-500 text-4xl font-font-2-bold text-center mb-4 uppercase">
                     $PETF Presale is live
                   </div>
-                  <div className="text-center mb-8">
+                  <div className="text-center mb-8 text-base lg:text-lg">
                     You can now claim your $PETF tokens. Plus, stake your tokens
                     to earn rewards! Add 0xEfC814a4C676a7314a13
                     <br className="lg:hidden" />
                     954e283dE6CEF597e6b2 to your wallet to see your $PETF.
                   </div>
-                  <div className="text-xl font-font-2-extra-bold text-center mb-6">
+                  <div className="text-2xl font-font-2-extra-bold text-center mb-6">
                     USDT RAISED: $12,748,563.16
                   </div>
                   <motion.div
-                    className="flex font-font-2-extra-bold justify-center items-center gap-5 mb-2 px-4"
+                    className="flex font-font-2-extra-bold justify-center items-center gap-5 mb-2 px-4 text-base lg:text-lg"
                     whileHover={{ scale: 1.02 }}
                   >
                     <div>MY PURCHASED $PETF = 0</div>
                     <div>{svg.head_important_icon()}</div>
                   </motion.div>
                   <motion.div
-                    className="flex font-font-2-extra-bold justify-center items-center gap-5 mb-6 px-4"
+                    className="flex font-font-2-extra-bold justify-center items-center gap-5 mb-6 px-4 text-base lg:text-lg"
                     whileHover={{ scale: 1.02 }}
                   >
                     <div>MY STAKEABLE $PETF = 0</div>
@@ -541,7 +541,7 @@ export default function Header() {
             </motion.div>
 
             <motion.div
-              className="mt-5 pb-20 flex flex-col items-center text-center text-white w-full lg:w-[78%]"
+              className="mt-5 pb-20 flex flex-col items-center text-center text-white w-full lg:w-[100%]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5 }}

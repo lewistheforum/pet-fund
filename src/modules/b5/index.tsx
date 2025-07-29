@@ -16,9 +16,9 @@ export default function B5() {
             </div>
           </AnimatedSection>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pb-10 ">
           <AnimatedSection variant="fadeLeft" delay={0.2}>
-            <div className="flex flex-col gap-5 border border-white rounded-2xl px-10 py-10">
+            <div className="flex flex-col items-start justify-center gap-5 border border-white rounded-2xl px-10 py-10 lg:h-[500px]">
               <AnimatedSection variant="fadeUp" delay={0.3}>
                 <div className="flex flex-row items-start gap-5">
                   <div className="h-20 w-2 bg-[#4AA76C]"></div>
@@ -74,10 +74,10 @@ export default function B5() {
             </div>
           </AnimatedSection>
           <AnimatedSection variant="fadeRight" delay={0.2}>
-            <div className="flex flex-col justify-end gap-5 px-10 pt-10 pb-5 border border-white rounded-2xl h-full">
+            <div className="flex flex-col justify-end gap-5 px-10 pt-10 pb-5 border border-white rounded-2xl h-[370px] lg:h-[500px]">
               <AnimatedSection variant="scale" delay={0.3}>
                 <div className="relative w-full lg:w-[598px] h-[200px] lg:h-[250px]">
-                  <div className="absolute top-[60%] lg:top-1/2 left-1/3 lg:left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
+                  <div className="absolute top-[50%] lg:top-1/2 left-1/3 lg:left-[50%] 2xl:left-[55%] -translate-x-1/2 -translate-y-1/2 w-full h-full">
                     {/* 30% segment - Cyan */}
                     <div className="absolute -top-[53px] lg:-top-[66px] -right-[81px] lg:-right-[27px] w-[82%] h-[82%]">
                       {svg.b5_30()}
