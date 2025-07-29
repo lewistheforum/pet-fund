@@ -3,6 +3,7 @@
 import svg from "@/utils/svg";
 import Image from "next/image";
 import bg from "../../../public/body/b4-bg.png";
+import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
 export default function B4() {
   const hiw = [
@@ -22,7 +23,7 @@ export default function B4() {
       svg: svg.b4_hiw_3(),
       title: "Profit Distribution",
       description:
-        "Profits are split—part reinvested in rescues, part distributed to $MEOWF holders as rewards.",
+        "Profits are split—part reinvested in rescues, part distributed to $PETF holders as rewards.",
     },
     {
       svg: svg.b4_hiw_4(),
@@ -66,58 +67,30 @@ export default function B4() {
     },
   ];
   return (
-    <div className="relative text-white px-5 lg:px-20 pt-16">
+    <div
+      id="section-howtobuy"
+      className="relative text-white px-5 lg:px-20 pt-16"
+    >
       <Image src={bg} alt="bg" fill priority className="object-cover" />
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50" />
       <div className="relative z-10">
         <div>
-          <div className="flex flex-row justify-center items-center gap-5 pb-10">
-            <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl">
-              HOW IT WORKS
+          <AnimatedSection variant="fadeUp">
+            <div className="flex flex-row justify-center items-center gap-5 pb-10">
+              <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl">
+                HOW IT WORKS
+              </div>
             </div>
-          </div>
+          </AnimatedSection>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 pb-10">
           {hiw.map((item, index) => (
-            <div
+            <AnimatedSection
               key={index}
-              className="flex flex-col items-center gap-5 bg-[#D9D9D9] w-full py-7 px-3 rounded-2xl"
+              variant={index % 2 === 0 ? "fadeUp" : "fadeDown"}
+              delay={0.1 * index}
             >
-              <div className="flex flex-col items-center gap-10">
-                <div className="h-32 flex items-center justify-center">
-                  {item.svg}
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <div className="uppercase text-base font-font-2-extra-bold text-[#4AA76C]">
-                    {item.title}
-                  </div>
-                  <div className="text-sm font-font-2 text-center text-black">
-                    {item.description}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="text-white pt-16 relative z-10">
-        <div>
-          <div>
-            <div className="flex flex-row justify-center items-center gap-5 pb-10">
-              <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl">
-                Utility of Token
-              </div>
-            </div>
-          </div>
-          <div className="font-font-2-extra-bold text-2xl text-center pb-10">
-            The $MEOWF token is the lifeblood of the Meow Fund ecosystem:
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 pb-10">
-            {uot.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center gap-5 bg-[#D9D9D9] w-full py-7 px-3 rounded-2xl"
-              >
+              <div className="flex flex-col items-center gap-5 bg-[#D9D9D9] w-full py-7 px-3 rounded-2xl h-full">
                 <div className="flex flex-col items-center gap-10">
                   <div className="h-32 flex items-center justify-center">
                     {item.svg}
@@ -132,6 +105,45 @@ export default function B4() {
                   </div>
                 </div>
               </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+      <div className="text-white pt-16 relative z-10">
+        <div>
+          <div>
+            <AnimatedSection variant="fadeUp">
+              <div className="flex flex-row justify-center items-center gap-5 pb-10">
+                <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl">
+                  Utility of Token
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
+          <AnimatedSection variant="fadeUp" delay={0.2}>
+            <div className="font-font-2-extra-bold text-2xl text-center pb-10">
+              The $MEOWF token is the lifeblood of the Meow Fund ecosystem:
+            </div>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 pb-10">
+            {uot.map((item, index) => (
+              <AnimatedSection key={index} variant="scale" delay={0.15 * index}>
+                <div className="flex flex-col items-center gap-5 bg-[#D9D9D9] w-full py-7 px-3 rounded-2xl">
+                  <div className="flex flex-col items-center gap-10">
+                    <div className="h-32 flex items-center justify-center">
+                      {item.svg}
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="uppercase text-base font-font-2-extra-bold text-[#4AA76C]">
+                        {item.title}
+                      </div>
+                      <div className="text-sm font-font-2 text-center text-black">
+                        {item.description}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
