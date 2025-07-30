@@ -21,6 +21,7 @@ export default {
         "font-2": "var(--font-font-2)",
         "font-2-bold": "var(--font-font-2-bold)",
         "font-2-extra-bold": "var(--font-font-2-extra-bold)",
+        "font-2-black": "var(--font-font-2-black)",
       },
       screen: {
         md: "790px",

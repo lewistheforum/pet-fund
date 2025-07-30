@@ -9,6 +9,7 @@
   --font-font-2: "Jeko-Regular", sans-serif;
   --font-font-2-bold: "Jeko-Bold", sans-serif;
   --font-font-2-extra-bold: "Jeko-Extra-Bold", sans-serif;
+  --font-font-2-black: "Jeko-Black", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,6 +20,7 @@
     --font-font-2: "Jeko-Regular", sans-serif;
     --font-font-2-bold: "Jeko-Bold", sans-serif;
     --font-font-2-extra-bold: "Jeko-Extra-Bold", sans-serif;
+    --font-font-2-black: "Jeko-Black", sans-serif;
   }
 }
 
@@ -47,6 +49,13 @@
   font-family: "Jeko-Extra-Bold";
   src: url("./fonts/Jeko-Extra-Bold.ttf") format("truetype");
   font-weight: extra-bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Jeko-Black";
+  src: url("./fonts/Jeko-Black.ttf") format("truetype");
+  font-weight: black;
   font-style: normal;
 }
 
@@ -111,6 +120,10 @@
 }
 .delay-1 {
   animation-delay: 0.2s;
+}
+
+.scroll-bar-hidden::-webkit-scrollbar {
+  display: none;
 }
 
 body {

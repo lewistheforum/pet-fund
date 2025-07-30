@@ -32,6 +32,7 @@
     "react-dom": "^19.0.0",
     "react-fast-marquee": "^1.6.5",
     "react-hot-toast": "^2.5.1",
+    "recharts": "^3.1.0",
     "set-up": "file:",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
