@@ -79,7 +79,7 @@ export default function B5() {
                 <div className="relative w-full lg:w-[598px] h-[200px] lg:h-[250px]">
                   <div className="absolute top-[50%] lg:top-1/2 left-1/3 lg:left-[50%] 2xl:left-[55%] -translate-x-1/2 -translate-y-1/2 w-full h-full">
                     {/* 30% segment - Cyan */}
-                    <div className="absolute -top-[53px] lg:-top-[66px] -right-[81px] lg:-right-[27px] w-[82%] h-[82%]">
+                    <div className="absolute -top-[53px] -right-[81px] lg:-top-[66px] lg:-right-[27px] w-[82%] h-[82%]">
                       {svg.b5_30()}
                     </div>
 

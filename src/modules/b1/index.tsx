@@ -68,11 +68,11 @@ export default function B1() {
         </AnimatedSection>
         <AnimatedSection variant="fadeUp" delay={0.3}>
           <div className="mb-20">
-            <Marquee className="gap-5" direction="left">
+            <Marquee className="gap-5 pt-10" direction="left">
               {DATA.galleryItems.map((item, index) => (
                 <div
                   key={index}
-                  className="relative flex flex-row items-center gap-1 mr-5"
+                  className="cursor-pointer relative flex flex-row items-center justify-end gap-1 mr-5 hover:-translate-y-5 transition-all duration-300"
                 >
                   <Image
                     src={item.imageUrl}
