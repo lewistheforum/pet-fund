@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MEOW FUND",
+  title: "PET FUND",
   description:
-    "[ $meof: THE BEST CRYPTO PRESALE ] - $MEOWF goes beyond the best crypto presale in 2025. Meow Fund unites cat lovers on a SocialFi platform to fund rescues in war zones.",
+    "[ $pef: THE BEST CRYPTO PRESALE ] - $PETF goes beyond the best crypto presale in 2025. Meow Fund unites cat lovers on a SocialFi platform to fund rescues in war zones.",
 };
 
 export default function RootLayout({
