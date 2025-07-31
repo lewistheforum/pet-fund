@@ -1,7 +1,7 @@
 "use client";
 
 import svg from "@/utils/svg";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 // import { useCopyToClipboard } from "usehooks-ts";
 // import toast from "react-hot-toast";
 import bg from "../../public/head/head-bg.png";
@@ -10,6 +10,12 @@ import "@/styles/button.css";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { DATA } from "@/utils/data";
+
+// Wallet imports
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { mainnet, bsc } from "wagmi/chains";
 
 interface TokenData {
   totalTokensSold: number;
@@ -31,8 +37,35 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   // const [, copy] = useCopyToClipboard();
   const [selectedOption, setSelectedOption] = useState(0);
-  const [purchaseAmount, setPurchaseAmount] = useState<string>("0.00");
-  const [selectedCurrency, setSelectedCurrency] = useState<string>("ETH");
+
+  // New states for 4-step buy process
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [selectedNetwork, setSelectedNetwork] = useState<string>("");
+  const [selectedToken, setSelectedToken] = useState<string>("");
+  const [purchaseAmountNew, setPurchaseAmountNew] = useState<string>("");
+
+  const [selectedWallet, setSelectedWallet] = useState<string>("");
+  const [showWalletOptions, setShowWalletOptions] = useState<boolean>(false);
+
+  // Wallet hooks
+  // EVM wallet hooks (Wagmi)
+  const {
+    address: evmAddress,
+    isConnected: isEvmConnected,
+    chain,
+  } = useAccount();
+  const { connect: evmConnect, connectors } = useConnect();
+  const { disconnect: evmDisconnect } = useDisconnect();
+  const { switchChain } = useSwitchChain();
+
+  // Solana wallet hooks
+  const {
+    publicKey: solanaAddress,
+    connected: isSolanaConnected,
+    disconnect: solanaDisconnect,
+  } = useWallet();
+  const { setVisible: setSolanaModalVisible } = useWalletModal();
+
   // const [isHeaderScrolling, setIsHeaderScrolling] = useState(true);
   // const lastScrollY = useRef(0);
   // const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -51,7 +84,7 @@ export default function Header() {
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5 },
     },
     exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
   };
@@ -150,37 +183,357 @@ export default function Header() {
     totalPhaseTarget: 30000000,
   };
 
-  const currencies = [
-    { code: "ETH", name: "ETH", icon: svg.head_eth() },
-    { code: "BNB", name: "BNB", icon: svg.head_bnb() },
-    { code: "USDT", name: "USDT", icon: svg.head_usdt() },
-    { code: "OTHER", name: "OTHER", icon: "" },
+  // Networks and tokens for the new buy flow
+  const networks = [
+    {
+      code: "SOLANA",
+      name: "Solana",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="12" fill="#9945FF" />
+          <path
+            d="M8.5 16.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
+            fill="white"
+          />
+          <path
+            d="M6.5 14c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5h-11z"
+            fill="white"
+          />
+          <path
+            d="M8.5 11.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
+            fill="white"
+          />
+        </svg>
+      ),
+    },
+    {
+      code: "ETHEREUM",
+      name: "Ethereum",
+      icon: svg.head_eth(),
+    },
+    {
+      code: "BSC",
+      name: "BSC",
+      icon: svg.head_bnb(),
+    },
   ];
+
+  const tokens = useMemo(
+    () => [
+      {
+        code: "SOL",
+        name: "SOL",
+        networks: ["SOLANA"],
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#9945FF" />
+            <path
+              d="M8.5 16.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
+              fill="white"
+            />
+            <path
+              d="M6.5 14c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5h-11z"
+              fill="white"
+            />
+            <path
+              d="M8.5 11.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
+              fill="white"
+            />
+          </svg>
+        ),
+      },
+      {
+        code: "ETH",
+        name: "ETH",
+        networks: ["ETHEREUM"],
+        icon: svg.head_eth(),
+      },
+      {
+        code: "BNB",
+        name: "BNB",
+        networks: ["BSC"],
+        icon: svg.head_bnb(),
+      },
+      {
+        code: "USDT",
+        name: "USDT",
+        networks: ["ETHEREUM", "BSC"],
+        icon: svg.head_usdt(),
+      },
+      {
+        code: "USDC",
+        name: "USDC",
+        networks: ["ETHEREUM", "BSC"],
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#2775CA" />
+            <text
+              x="12"
+              y="16"
+              fontSize="10"
+              fill="white"
+              textAnchor="middle"
+              fontWeight="bold"
+            >
+              $
+            </text>
+          </svg>
+        ),
+      },
+    ],
+    []
+  );
 
   const formatNumber = (num: number): string => {
     return num.toLocaleString();
   };
 
-  const handlePurchaseAmountChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    if (value === "" || /^\d*\.?\d*$/.test(value)) {
-      setPurchaseAmount(value);
+  // Helper functions for the new buy flow
+  const handleNetworkSelect = useCallback((networkCode: string) => {
+    setSelectedNetwork(networkCode);
+    setSelectedToken(""); // Reset token when network changes
+    // Reset wallet connection will be handled by real wallet state
+    setSelectedWallet(""); // Reset selected wallet
+    setShowWalletOptions(false); // Hide wallet options
+    setCurrentStep(2);
+  }, []);
+
+  const handleTokenSelect = useCallback((tokenCode: string) => {
+    setSelectedToken(tokenCode);
+    setCurrentStep(3);
+  }, []);
+
+  const handleAmountChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      if (value === "" || /^\d*\.?\d*$/.test(value)) {
+        setPurchaseAmountNew(value);
+      }
+    },
+    []
+  );
+
+  const handleNextStep = useCallback(() => {
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
     }
-  };
+  }, [currentStep]);
 
-  const calculateTokensReceived = (): number => {
-    const amount = parseFloat(purchaseAmount) || 0;
-    return amount / tokenData.currentPrice;
-  };
+  const handlePreviousStep = useCallback(() => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  }, [currentStep]);
 
-  const calculateUSDTWorth = (): number => {
-    const amount = parseFloat(purchaseAmount) || 0;
-    // Assuming ETH price for calculation (this would need real-time data)
-    const ethToUsd = 2500; // Example rate
-    return selectedCurrency === "ETH" ? amount * ethToUsd : amount;
-  };
+  const connectWallet = useCallback(
+    async (walletType?: string) => {
+      const wallet = walletType || selectedWallet;
+
+      try {
+        if (selectedNetwork === "SOLANA") {
+          // Solana wallet connection
+          setSolanaModalVisible(true);
+          setSelectedWallet(wallet);
+          setShowWalletOptions(false);
+        } else {
+          // EVM wallet connection (Ethereum/BSC)
+          const targetChainId =
+            selectedNetwork === "ETHEREUM" ? mainnet.id : bsc.id;
+
+          // Find the right connector
+          let connector;
+          if (wallet === "MetaMask") {
+            connector = connectors.find(
+              (c) => c.id === "metaMask" || c.name.includes("MetaMask")
+            );
+          } else if (wallet === "WalletConnect") {
+            connector = connectors.find((c) => c.id === "walletConnect");
+          } else if (wallet === "Coinbase Wallet") {
+            connector = connectors.find((c) => c.id === "coinbaseWallet");
+          } else if (wallet === "Trust Wallet") {
+            connector = connectors.find((c) => c.name.includes("Trust"));
+          }
+
+          if (connector) {
+            await evmConnect({ connector });
+
+            // Switch to correct network if needed
+            if (chain?.id !== targetChainId) {
+              await switchChain({ chainId: targetChainId });
+            }
+
+            setSelectedWallet(wallet);
+            setShowWalletOptions(false);
+            console.log(`Connected ${wallet} wallet for ${selectedNetwork}`);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to connect wallet:", error);
+      }
+    },
+    [
+      selectedNetwork,
+      selectedWallet,
+      setSolanaModalVisible,
+      evmConnect,
+      connectors,
+      chain,
+      switchChain,
+    ]
+  );
+
+  const showWalletSelector = useCallback(() => {
+    setShowWalletOptions(true);
+  }, []);
+
+  // Helper function to check if wallet is connected for current network
+  const isWalletConnectedForNetwork = useCallback(() => {
+    if (selectedNetwork === "SOLANA") {
+      return isSolanaConnected && solanaAddress;
+    } else {
+      // For EVM networks (Ethereum/BSC)
+      const targetChainId =
+        selectedNetwork === "ETHEREUM" ? mainnet.id : bsc.id;
+      return (
+        isEvmConnected && evmAddress && (!chain || chain.id === targetChainId)
+      );
+    }
+  }, [
+    selectedNetwork,
+    isSolanaConnected,
+    solanaAddress,
+    isEvmConnected,
+    evmAddress,
+    chain,
+  ]);
+
+  // Helper function to get current wallet address
+  const getCurrentWalletAddress = useCallback(() => {
+    if (selectedNetwork === "SOLANA") {
+      return solanaAddress?.toString();
+    } else {
+      return evmAddress;
+    }
+  }, [selectedNetwork, solanaAddress, evmAddress]);
+
+  // Helper function to disconnect wallet
+  const disconnectWallet = useCallback(async () => {
+    try {
+      if (selectedNetwork === "SOLANA" && isSolanaConnected) {
+        await solanaDisconnect();
+      } else if (isEvmConnected) {
+        await evmDisconnect();
+      }
+
+      setSelectedWallet("");
+      setShowWalletOptions(false);
+    } catch (error) {
+      console.error("Failed to disconnect wallet:", error);
+    }
+  }, [
+    selectedNetwork,
+    isSolanaConnected,
+    isEvmConnected,
+    solanaDisconnect,
+    evmDisconnect,
+  ]);
+
+  const getWalletOptions = useCallback(() => {
+    switch (selectedNetwork) {
+      case "SOLANA":
+        return [
+          {
+            name: "Phantom",
+            icon: "🟣",
+            description: "Popular Solana wallet",
+          },
+          {
+            name: "Solflare",
+            icon: "🌟",
+            description: "Multi-platform Solana wallet",
+          },
+          {
+            name: "Backpack",
+            icon: "🎒",
+            description: "Modern Solana wallet",
+          },
+        ];
+      case "ETHEREUM":
+        return [
+          {
+            name: "MetaMask",
+            icon: "🦊",
+            description: "Most popular Ethereum wallet",
+          },
+          {
+            name: "WalletConnect",
+            icon: "🔗",
+            description: "Connect multiple wallets",
+          },
+          {
+            name: "Coinbase Wallet",
+            icon: "🔵",
+            description: "Coinbase's self-custody wallet",
+          },
+        ];
+      case "BSC":
+        return [
+          {
+            name: "MetaMask",
+            icon: "🦊",
+            description: "Configure for BSC network",
+          },
+          {
+            name: "Trust Wallet",
+            icon: "🛡️",
+            description: "Binance's official wallet",
+          },
+          {
+            name: "WalletConnect",
+            icon: "🔗",
+            description: "Connect multiple wallets",
+          },
+        ];
+      default:
+        return [];
+    }
+  }, [selectedNetwork]);
+
+  const handleBuy = useCallback(() => {
+    const isConnected = isWalletConnectedForNetwork();
+    if (isConnected && purchaseAmountNew && selectedToken) {
+      const walletAddress = getCurrentWalletAddress();
+      console.log(
+        `Buying ${purchaseAmountNew} ${selectedToken} on ${selectedNetwork} with wallet ${walletAddress}`
+      );
+      // Buy logic would go here
+    }
+  }, [
+    isWalletConnectedForNetwork,
+    getCurrentWalletAddress,
+    purchaseAmountNew,
+    selectedToken,
+    selectedNetwork,
+  ]);
+
+  const getAvailableTokens = useCallback(() => {
+    return tokens.filter((token) => token.networks.includes(selectedNetwork));
+  }, [selectedNetwork, tokens]);
+
+  const getStepTitle = useCallback(() => {
+    switch (currentStep) {
+      case 1:
+        return "Select Network";
+      case 2:
+        return "Choose Token";
+      case 3:
+        return "Enter Amount";
+      case 4:
+        return "Connect & Buy";
+      default:
+        return "";
+    }
+  }, [currentStep]);
 
   const generateData = (): SupplyData[] => {
     const data: SupplyData[] = [];
@@ -235,7 +588,7 @@ export default function Header() {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         damping: 20,
         mass: 1,
@@ -261,7 +614,7 @@ export default function Header() {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 24,
       },
@@ -276,7 +629,7 @@ export default function Header() {
       x: 0,
       rotate: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 200,
         damping: 20,
       },
@@ -284,7 +637,7 @@ export default function Header() {
     hover: {
       scale: 1.05,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -311,7 +664,7 @@ export default function Header() {
       opacity: 1,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 15,
       },
@@ -320,7 +673,7 @@ export default function Header() {
       scale: 1.2,
       rotate: 5,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -334,7 +687,7 @@ export default function Header() {
       opacity: 1,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 15,
         delay: 0.7,
@@ -344,7 +697,7 @@ export default function Header() {
       scale: 1.05,
       boxShadow: "0px 8px 15px rgba(74, 167, 108, 0.3)",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -361,7 +714,7 @@ export default function Header() {
       opacity: 1,
       scale: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 15,
       },
@@ -370,7 +723,7 @@ export default function Header() {
       scale: 1.1,
       rotate: 5,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -388,7 +741,7 @@ export default function Header() {
       opacity: 1,
       x: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 30,
       },
@@ -397,7 +750,7 @@ export default function Header() {
       opacity: 0,
       x: "100%",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 30,
       },
@@ -411,7 +764,7 @@ export default function Header() {
       x: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 20,
       },
@@ -421,7 +774,7 @@ export default function Header() {
       x: 10,
       color: "#4AA76C",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -451,7 +804,7 @@ export default function Header() {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         damping: 15,
       },
@@ -490,7 +843,7 @@ export default function Header() {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 15,
       },
@@ -499,7 +852,7 @@ export default function Header() {
       y: -5,
       boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
       },
     },
@@ -513,7 +866,7 @@ export default function Header() {
       scale: 1,
       transition: {
         delay: 0.9,
-        type: "spring",
+        type: "spring" as const,
         stiffness: 200,
         damping: 15,
       },
@@ -522,7 +875,7 @@ export default function Header() {
       scale: 1.05,
       boxShadow: "0px 10px 25px rgba(74, 167, 108, 0.35)",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -550,7 +903,7 @@ export default function Header() {
       opacity: 1,
       x: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 15,
       },
@@ -559,7 +912,7 @@ export default function Header() {
       scale: 1.02,
       x: 5,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
         damping: 10,
       },
@@ -573,7 +926,7 @@ export default function Header() {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 200,
         damping: 20,
         delay: 0.4,
@@ -600,7 +953,7 @@ export default function Header() {
       scale: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 15,
       },
@@ -609,7 +962,7 @@ export default function Header() {
       y: -5,
       boxShadow: "0px 10px 25px rgba(74, 167, 108, 0.15)",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 500,
         damping: 15,
       },
@@ -622,7 +975,7 @@ export default function Header() {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         damping: 15,
         delay: 1.0,
@@ -659,7 +1012,7 @@ export default function Header() {
       scaleY: 1,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 200,
         damping: 20,
         delay: custom * 0.05,
@@ -794,7 +1147,6 @@ export default function Header() {
                     transition={{
                       delay: 0.8,
                       duration: 1.5,
-                      ease: "easeOut",
                     }}
                   ></motion.div>
                 </div>
@@ -825,141 +1177,343 @@ export default function Header() {
               transition={{ delay: 1.0 }}
             />
 
-            {/* Currency Selection */}
+            {/* New 4-Step Buy Process */}
             <motion.div
-              className="grid grid-cols-4 gap-2 mb-6"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1,
-                    delayChildren: 1.1,
-                  },
-                },
-              }}
-            >
-              {currencies.map((currency) => (
-                <motion.button
-                  key={currency.code}
-                  onClick={() => setSelectedCurrency(currency.code)}
-                  className={`py-3 px-4 rounded-lg border-2 font-medium transition-all ${
-                    selectedCurrency === currency.code
-                      ? "bg-[#4AA76C] text-white border-[#4AA76C]"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-[#4AA76C]"
-                  }`}
-                  variants={{
-                    hidden: { opacity: 0, y: 10 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <div className="flex items-center justify-center space-x-1">
-                    <span>{currency.icon}</span>
-                    <span>{currency.name}</span>
-                  </div>
-                </motion.button>
-              ))}
-            </motion.div>
-
-            <motion.hr
-              className="border-gray-300 mb-6"
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: 1.3 }}
-            />
-
-            {/* Purchase Amount Input */}
-            <motion.div
-              className="mb-6"
+              className="mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.4 }}
+              transition={{ delay: 1.1 }}
             >
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-gray-800 font-medium">
-                  Purchase Amount
-                </span>
-                <div className="relative">
-                  <motion.input
-                    type="text"
-                    value={purchaseAmount}
-                    onChange={handlePurchaseAmountChange}
-                    className="w-full text-3xl font-bold text-[#4AA76C] bg-transparent border-none outline-none text-center"
-                    placeholder="0.00"
-                    whileFocus={{ scale: 1.05 }}
-                    transition={{ duration: 0.2 }}
-                  />
+              {/* Simplified Step Progress */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                  {[
+                    { step: 1, icon: "⚡", label: "Network" },
+                    { step: 2, icon: "○", label: "Token" },
+                    { step: 3, icon: "#", label: "Amount" },
+                    { step: 4, icon: "□", label: "Buy" },
+                  ].map((item, index) => (
+                    <div key={item.step} className="flex items-center flex-1">
+                      <div
+                        className={`w-8 h-8 rounded border-2 flex items-center justify-center text-sm font-bold ${
+                          item.step <= currentStep
+                            ? "bg-[#4AA76C] text-white border-[#4AA76C]"
+                            : "bg-white text-gray-400 border-gray-300"
+                        }`}
+                      >
+                        {item.step <= currentStep ? "✓" : item.step}
+                      </div>
+                      <span
+                        className={`ml-2 text-sm font-medium ${
+                          item.step <= currentStep
+                            ? "text-[#4AA76C]"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {item.label}
+                      </span>
+                      {index < 3 && (
+                        <div className="flex-1 mx-2 h-px bg-gray-300"></div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <span className="text-gray-600">{selectedCurrency}</span>
               </div>
+
+              {/* Step Content */}
+              {currentStep === 1 && (
+                <div className="space-y-4">
+                  <h4 className="text-lg font-bold text-black mb-4">
+                    Select Network
+                  </h4>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    {networks.map((network) => (
+                      <button
+                        key={network.code}
+                        onClick={() => handleNetworkSelect(network.code)}
+                        className={`p-3 border-2 rounded-lg transition-all ${
+                          selectedNetwork === network.code
+                            ? "border-[#4AA76C] bg-[#4AA76C] text-white"
+                            : "border-gray-200 bg-white text-black hover:border-gray-300"
+                        }`}
+                      >
+                        <div className="flex flex-col items-center space-y-2">
+                          <div
+                            className={`w-8 h-8 rounded flex items-center justify-center ${
+                              selectedNetwork === network.code
+                                ? "bg-white/20"
+                                : "bg-gray-100"
+                            }`}
+                          >
+                            {network.icon}
+                          </div>
+                          <div className="text-center">
+                            <div className="font-semibold text-sm">
+                              {network.name}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 2 && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-bold text-black">
+                      Select Token
+                    </h4>
+                    <span className="text-sm text-gray-500">
+                      {selectedNetwork}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {getAvailableTokens().map((token) => (
+                      <button
+                        key={token.code}
+                        onClick={() => handleTokenSelect(token.code)}
+                        className={`flex-1 p-2 border-2 rounded-lg transition-all ${
+                          selectedToken === token.code
+                            ? "border-[#4AA76C] bg-[#4AA76C] text-white"
+                            : "border-gray-200 bg-white text-black hover:border-gray-300"
+                        }`}
+                      >
+                        <div className="flex flex-col items-center space-y-1">
+                          <div
+                            className={`w-6 h-6 rounded flex items-center justify-center ${
+                              selectedToken === token.code
+                                ? "bg-white/20"
+                                : "bg-gray-100"
+                            }`}
+                          >
+                            {token.icon}
+                          </div>
+                          <div className="text-center">
+                            <div className="font-semibold text-xs">
+                              {token.name}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={handlePreviousStep}
+                    className="w-full py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all"
+                  >
+                    ← Back
+                  </button>
+                </div>
+              )}
+
+              {currentStep === 3 && (
+                <div className="space-y-4">
+                  <h4 className="text-lg font-bold text-black">Enter Amount</h4>
+
+                  {/* Amount Input */}
+                  <div className="space-y-3">
+                    <div className="border-2 border-gray-200 rounded-lg p-4 focus-within:border-[#4AA76C]">
+                      <input
+                        type="text"
+                        value={purchaseAmountNew}
+                        onChange={handleAmountChange}
+                        className="w-full text-2xl font-bold text-black bg-transparent outline-none text-center"
+                        placeholder="0.00"
+                      />
+                      <div className="text-center mt-1 text-gray-500">
+                        {selectedToken}
+                      </div>
+                    </div>
+
+                    {/* Quick Amounts */}
+                    <div className="grid grid-cols-3 gap-2">
+                      {["0.1", "0.5", "1.0"].map((amount) => (
+                        <button
+                          key={amount}
+                          onClick={() => setPurchaseAmountNew(amount)}
+                          className="py-2 px-3 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm"
+                        >
+                          {amount}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Result */}
+                  {purchaseAmountNew &&
+                    !isNaN(parseFloat(purchaseAmountNew)) && (
+                      <div className="bg-gray-50 border rounded-lg p-4">
+                        <div className="text-sm text-gray-600 mb-1">
+                          You will receive:
+                        </div>
+                        <div className="text-xl font-bold text-[#4AA76C]">
+                          {(
+                            parseFloat(purchaseAmountNew) /
+                            tokenData.currentPrice
+                          ).toFixed(2)}{" "}
+                          $PETF
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          Price: ${tokenData.currentPrice} • Total:{" "}
+                          {purchaseAmountNew} {selectedToken}
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Navigation */}
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={handlePreviousStep}
+                      className="flex-1 py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      onClick={handleNextStep}
+                      disabled={
+                        !purchaseAmountNew ||
+                        isNaN(parseFloat(purchaseAmountNew))
+                      }
+                      className={`flex-2 py-2 px-6 rounded-lg font-semibold ${
+                        purchaseAmountNew &&
+                        !isNaN(parseFloat(purchaseAmountNew))
+                          ? "bg-[#4AA76C] text-white hover:bg-[#3d8c5a]"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      Continue →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 4 && (
+                <div className="space-y-4">
+                  <h4 className="text-lg font-bold text-black">BUY $PETF</h4>
+
+                  {/* Order Summary */}
+                  <div className="bg-gray-50 border rounded-lg p-4">
+                    <h5 className="font-semibold text-black mb-3">
+                      Order Summary
+                    </h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Network:</span>
+                        <span className="font-semibold text-black">
+                          {selectedNetwork}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Token:</span>
+                        <span className="font-semibold text-black">
+                          {selectedToken}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Amount:</span>
+                        <span className="font-semibold text-black">
+                          {purchaseAmountNew} {selectedToken}
+                        </span>
+                      </div>
+                      <div className="flex justify-between pt-2 border-t">
+                        <span className="text-gray-600">
+                          You&apos;ll receive:
+                        </span>
+                        <span className="font-bold text-[#4AA76C]">
+                          {purchaseAmountNew &&
+                          !isNaN(parseFloat(purchaseAmountNew))
+                            ? (
+                                parseFloat(purchaseAmountNew) /
+                                tokenData.currentPrice
+                              ).toFixed(2)
+                            : "0.00"}{" "}
+                          $PETF
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Wallet Connection */}
+                  {!isWalletConnectedForNetwork() ? (
+                    !showWalletOptions ? (
+                      <button
+                        onClick={showWalletSelector}
+                        className="w-full bg-[#4AA76C] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#3d8c5a] transition-all"
+                      >
+                        Connect Wallet
+                      </button>
+                    ) : (
+                      <div className="space-y-3">
+                        <h5 className="font-semibold text-black">
+                          Choose Wallet:
+                        </h5>
+                        {getWalletOptions().map((wallet) => (
+                          <button
+                            key={wallet.name}
+                            onClick={() => connectWallet(wallet.name)}
+                            className="w-full p-3 bg-white border-2 border-gray-200 rounded-lg hover:border-[#4AA76C] transition-all flex items-center space-x-3"
+                          >
+                            <span className="text-lg">{wallet.icon}</span>
+                            <span className="font-semibold text-black">
+                              {wallet.name}
+                            </span>
+                          </button>
+                        ))}
+                        <button
+                          onClick={() => setShowWalletOptions(false)}
+                          className="w-full py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
+                        >
+                          ← Back
+                        </button>
+                      </div>
+                    )
+                  ) : (
+                    <div className="space-y-3">
+                      {/* Connected State */}
+                      <div className="bg-green-50 border border-[#4AA76C] rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-semibold text-black">
+                              ✓ {selectedWallet} Connected
+                            </div>
+                            <div className="text-sm text-gray-600 font-mono">
+                              {getCurrentWalletAddress()?.slice(0, 8)}...
+                              {getCurrentWalletAddress()?.slice(-6)}
+                            </div>
+                          </div>
+                          <button
+                            onClick={disconnectWallet}
+                            className="text-red-600 hover:text-red-800 text-sm"
+                          >
+                            Disconnect
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Buy Button */}
+                      <button
+                        onClick={handleBuy}
+                        className="w-full bg-[#4AA76C] text-white font-bold py-4 px-6 rounded-lg hover:bg-[#3d8c5a] transition-all text-lg"
+                      >
+                        BUY $PETF TOKENS
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handlePreviousStep}
+                    className="w-full py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
+                  >
+                    ← Back
+                  </button>
+                </div>
+              )}
             </motion.div>
-
-            <motion.hr
-              className="border-gray-300 mb-6"
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ delay: 1.5 }}
-            />
-
-            {/* Results */}
-            <motion.div
-              className="grid grid-cols-2 gap-4 mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.6 }}
-            >
-              <motion.div
-                className="border-2 border-gray-300 rounded-lg p-4 flex flex-row items-center justify-between"
-                whileHover={{
-                  borderColor: "#4AA76C",
-                  boxShadow: "0px 4px 10px rgba(74, 167, 108, 0.1)",
-                }}
-              >
-                <div className="text-gray-600 text-sm font-medium">
-                  Amount You&apos;ll Get
-                </div>
-                <div className="text-[#4AA76C] text-3xl font-bold">
-                  {calculateTokensReceived().toFixed(2)}
-                </div>
-              </motion.div>
-              <motion.div
-                className="border-2 border-gray-300 rounded-lg p-4 flex flex-row items-center justify-between"
-                whileHover={{
-                  borderColor: "#4AA76C",
-                  boxShadow: "0px 4px 10px rgba(74, 167, 108, 0.1)",
-                }}
-              >
-                <div className="text-gray-600 text-sm font-medium">
-                  USDT Worth
-                </div>
-                <div className="text-[#4AA76C] text-3xl font-bold">
-                  {calculateUSDTWorth().toFixed(2)}
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Purchase Button */}
-            <motion.button
-              className="w-full bg-[#4AA76C] hover:bg-[#4AA76C] text-white font-bold py-4 px-6 rounded-xl transition-colors duration-200 text-lg"
-              onClick={() => {
-                // Handle purchase logic here
-                console.log(
-                  `Purchasing ${purchaseAmount} ${selectedCurrency} worth of $PETF tokens`
-                );
-              }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.7 }}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0px 8px 15px rgba(74, 167, 108, 0.3)",
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Buy Now
-            </motion.button>
           </motion.div>
           <motion.div
             className="mt-5 pb-20 flex flex-col items-center text-center text-white w-full lg:w-[100%]"
@@ -995,8 +1549,42 @@ export default function Header() {
         </>
       </div>
     ),
-    []
-  ); // Empty dependency array ensures this only renders once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      currentStep,
+      selectedNetwork,
+      selectedToken,
+      purchaseAmountNew,
+      isEvmConnected,
+      isSolanaConnected,
+      evmAddress,
+      solanaAddress,
+      chain,
+      selectedWallet,
+      showWalletOptions,
+      tokenData.currentPrice,
+      tokenData.totalTokensSold,
+      tokenData.nextPrice,
+      tokenData.amountRaised,
+      tokenData.phaseProgress,
+      tokenData.currentPhaseRaised,
+      tokenData.totalPhaseTarget,
+      handleNetworkSelect,
+      handleTokenSelect,
+      handleAmountChange,
+      handleNextStep,
+      handlePreviousStep,
+      connectWallet,
+      handleBuy,
+      getAvailableTokens,
+      getStepTitle,
+      showWalletSelector,
+      getWalletOptions,
+      isWalletConnectedForNetwork,
+      getCurrentWalletAddress,
+      disconnectWallet,
+    ]
+  ); // Dependencies for the buy process and token data
 
   // Memoize the home content section
   const memoizedHomeContent = useMemo(
@@ -1120,6 +1708,7 @@ export default function Header() {
         </motion.div>
       </div>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   ); // Empty dependency array ensures this only renders once
 
