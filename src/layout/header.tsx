@@ -6,6 +6,8 @@ import React, { useState, useMemo, useCallback } from "react";
 // import toast from "react-hot-toast";
 import bg from "../../public/head/head-bg.png";
 import logo from "../../public/head/head-logo.png";
+import solana from "../../public/solana-sol-logo.svg";
+import usdc from "../../public/usd-coin-usdc-logo.svg";
 import "@/styles/button.css";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -173,6 +175,15 @@ export default function Header() {
     // setIsHeaderScrolling(true);
   };
 
+  const scrollToSection = (sectionId: string) => {
+    if (sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   const tokenData: TokenData = {
     totalTokensSold: 28000000,
     currentPrice: 0.001,
@@ -189,21 +200,9 @@ export default function Header() {
       code: "SOLANA",
       name: "Solana",
       icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="12" fill="#9945FF" />
-          <path
-            d="M8.5 16.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
-            fill="white"
-          />
-          <path
-            d="M6.5 14c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5h-11z"
-            fill="white"
-          />
-          <path
-            d="M8.5 11.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
-            fill="white"
-          />
-        </svg>
+        <div className="w-8 h-8 flex items-center justify-center bg-white rounded-full">
+          <Image src={solana} alt="Solana" width={20} height={20} />
+        </div>
       ),
     },
     {
@@ -225,21 +224,9 @@ export default function Header() {
         name: "SOL",
         networks: ["SOLANA"],
         icon: (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="12" fill="#9945FF" />
-            <path
-              d="M8.5 16.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
-              fill="white"
-            />
-            <path
-              d="M6.5 14c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5h-11z"
-              fill="white"
-            />
-            <path
-              d="M8.5 11.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h7c.28 0 .5.22.5.5s-.22.5-.5.5h-7z"
-              fill="white"
-            />
-          </svg>
+          <div className="w-8 h-8 flex items-center justify-center bg-white rounded-full">
+            <Image src={solana} alt="Solana" width={20} height={20} />
+          </div>
         ),
       },
       {
@@ -264,21 +251,7 @@ export default function Header() {
         code: "USDC",
         name: "USDC",
         networks: ["ETHEREUM", "BSC"],
-        icon: (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="12" fill="#2775CA" />
-            <text
-              x="12"
-              y="16"
-              fontSize="10"
-              fill="white"
-              textAnchor="middle"
-              fontWeight="bold"
-            >
-              $
-            </text>
-          </svg>
-        ),
+        icon: <Image src={usdc} alt="USDC" width={25} height={25} />,
       },
     ],
     []
@@ -1026,7 +999,7 @@ export default function Header() {
       <div className="col-span-12 lg:col-span-6 relative flex flex-col justify-start pt-0 lg:pt-10 pb-10 lg:pb-0 px-5 lg:px-0 lg:pr-14 gap-5">
         <>
           <motion.div
-            className="w-full lg:w-3/4 mx-auto border border-[#4AA76C] rounded-xl shadow-2xl px-8 py-3 font-sans"
+            className="w-full lg:w-3/4 mx-auto border border-[#4AA76C] rounded-xl shadow-2xl px-8 py-3 font-sans mt-10 lg:mt-0"
             initial="initial"
             animate="animate"
             exit="exit"
@@ -1240,10 +1213,8 @@ export default function Header() {
                       >
                         <div className="flex flex-col items-center space-y-2">
                           <div
-                            className={`w-8 h-8 rounded flex items-center justify-center ${
-                              selectedNetwork === network.code
-                                ? "bg-white/20"
-                                : "bg-gray-100"
+                            className={`w-8 h-8 rounded flex items-center justify-center object-contain ${
+                              selectedNetwork === network.code ? "" : ""
                             }`}
                           >
                             {network.icon}
@@ -1284,10 +1255,8 @@ export default function Header() {
                       >
                         <div className="flex flex-col items-center space-y-1">
                           <div
-                            className={`w-6 h-6 rounded flex items-center justify-center ${
-                              selectedToken === token.code
-                                ? "bg-white/20"
-                                : "bg-gray-100"
+                            className={`w-8 h-8 rounded flex items-center justify-center ${
+                              selectedToken === token.code ? "" : ""
                             }`}
                           >
                             {token.icon}
@@ -1772,7 +1741,7 @@ export default function Header() {
                 </motion.div>
                 <motion.div
                   variants={navItemVariants}
-                  // onClick={() => handleNavClick(2)}
+                  onClick={() => scrollToSection("section-tokenomics")}
                   className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
                     selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
                   } cursor-pointer`}
@@ -2070,7 +2039,7 @@ export default function Header() {
                       },
                     },
                   }}
-                  className="h-[800px] w-full overflow-y-auto"
+                  className="h-[800px] w-full overflow-y-auto scroll-bar-hidden"
                 >
                   {DATA.faqData.map((item) => (
                     <div
