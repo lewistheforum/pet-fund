@@ -103,7 +103,6 @@ export default function Header() {
           if (prev <= 0) {
             return prev;
           }
-          // Skip from index 4 to index 2 when scrolling up
           if (prev === 3) {
             return 1;
           }
@@ -111,7 +110,6 @@ export default function Header() {
         });
       }
 
-      // Add timeout to prevent rapid scrolling through sections
       setTimeout(() => {
         isScrolling = false;
       }, 700);
