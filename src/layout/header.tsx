@@ -1,21 +1,15 @@
 "use client";
 
 import svg from "@/utils/svg";
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo } from "react";
 // import { useCopyToClipboard } from "usehooks-ts";
 // import toast from "react-hot-toast";
 import bg from "../../public/head/head-bg.png";
 import logo from "../../public/head/head-logo.png";
 import "@/styles/button.css";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { DATA } from "@/utils/data";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
 
 interface TokenData {
   totalTokensSold: number;
@@ -39,17 +33,17 @@ export default function Header() {
   const [selectedOption, setSelectedOption] = useState(0);
   const [purchaseAmount, setPurchaseAmount] = useState<string>("0.00");
   const [selectedCurrency, setSelectedCurrency] = useState<string>("ETH");
-  const [isHeaderScrolling, setIsHeaderScrolling] = useState(true);
-  const lastScrollY = useRef(0);
-  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  // const [isHeaderScrolling, setIsHeaderScrolling] = useState(true);
+  // const lastScrollY = useRef(0);
+  // const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // For header scroll animations
-  const { scrollY } = useScroll();
-  const headerShadow = useTransform(
-    scrollY,
-    [0, 100],
-    ["0px 0px 0px rgba(0, 0, 0, 0)", "0px 5px 15px rgba(0, 0, 0, 0.1)"]
-  );
+  // const { scrollY } = useScroll();
+  // const headerShadow = useTransform(
+  //   scrollY,
+  //   [0, 100],
+  //   ["0px 0px 0px rgba(0, 0, 0, 0)", "0px 5px 15px rgba(0, 0, 0, 0.1)"]
+  // );
 
   // Create section transition animation variants
   const sectionTransitionVariants = {
@@ -63,87 +57,87 @@ export default function Header() {
   };
 
   // Handle section navigation on scroll
-  useEffect(() => {
-    let isScrolling = false;
+  // useEffect(() => {
+  //   let isScrolling = false;
 
-    // Detect wheel events for more precise control
-    const handleWheel = (e: WheelEvent) => {
-      // If not in header scrolling mode, return early
-      if (!isHeaderScrolling) {
-        if (window.scrollY < 100) {
-          setIsHeaderScrolling(true);
-        }
-        return;
-      }
+  //   // Detect wheel events for more precise control
+  //   const handleWheel = (e: WheelEvent) => {
+  //     // If not in header scrolling mode, return early
+  //     if (!isHeaderScrolling) {
+  //       if (window.scrollY < 100) {
+  //         setIsHeaderScrolling(true);
+  //       }
+  //       return;
+  //     }
 
-      // Prevent default only while in header scrolling mode
-      e.preventDefault();
+  //     // Prevent default only while in header scrolling mode
+  //     e.preventDefault();
 
-      if (isScrolling) return;
-      isScrolling = true;
+  //     if (isScrolling) return;
+  //     isScrolling = true;
 
-      const scrollDirection = e.deltaY > 0 ? "down" : "up";
+  //     const scrollDirection = e.deltaY > 0 ? "down" : "up";
 
-      if (scrollDirection === "down") {
-        setSelectedOption((prev) => {
-          // If we've reached the last option, allow normal scrolling
-          if (prev >= 5) {
-            setIsHeaderScrolling(false);
-            return prev;
-          }
-          // Skip from index 2 to index 4 when scrolling down
-          if (prev === 1) {
-            return 3;
-          }
-          return Math.min(prev + 1, 5);
-        });
-      } else {
-        setSelectedOption((prev) => {
-          // If we've reached the first option and scrolling up, allow normal scrolling
-          if (prev <= 0) {
-            return prev;
-          }
-          // Skip from index 4 to index 2 when scrolling up
-          if (prev === 3) {
-            return 1;
-          }
-          return Math.max(prev - 1, 0);
-        });
-      }
+  //     if (scrollDirection === "down") {
+  //       setSelectedOption((prev) => {
+  //         // If we've reached the last option, allow normal scrolling
+  //         if (prev >= 5) {
+  //           setIsHeaderScrolling(false);
+  //           return prev;
+  //         }
+  //         // Skip from index 2 to index 4 when scrolling down
+  //         if (prev === 1) {
+  //           return 3;
+  //         }
+  //         return Math.min(prev + 1, 5);
+  //       });
+  //     } else {
+  //       setSelectedOption((prev) => {
+  //         // If we've reached the first option and scrolling up, allow normal scrolling
+  //         if (prev <= 0) {
+  //           return prev;
+  //         }
+  //         // Skip from index 4 to index 2 when scrolling up
+  //         if (prev === 3) {
+  //           return 1;
+  //         }
+  //         return Math.max(prev - 1, 0);
+  //       });
+  //     }
 
-      // Add timeout to prevent rapid scrolling through sections
-      setTimeout(() => {
-        isScrolling = false;
-      }, 700);
-    };
+  //     // Add timeout to prevent rapid scrolling through sections
+  //     setTimeout(() => {
+  //       isScrolling = false;
+  //     }, 700);
+  //   };
 
-    // Handle regular scroll for mobile/touch devices
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+  //   // Handle regular scroll for mobile/touch devices
+  //   const handleScroll = () => {
+  //     const currentScrollY = window.scrollY;
 
-      // Only for detecting when to re-enable header scrolling
-      if (!isHeaderScrolling && currentScrollY < 100) {
-        setIsHeaderScrolling(true);
-      }
+  //     // Only for detecting when to re-enable header scrolling
+  //     if (!isHeaderScrolling && currentScrollY < 100) {
+  //       setIsHeaderScrolling(true);
+  //     }
 
-      lastScrollY.current = currentScrollY;
-    };
+  //     lastScrollY.current = currentScrollY;
+  //   };
 
-    // Use wheel event for desktop and scroll for mobile
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("scroll", handleScroll, { passive: true });
+  //   // Use wheel event for desktop and scroll for mobile
+  //   window.addEventListener("wheel", handleWheel, { passive: false });
+  //   window.addEventListener("scroll", handleScroll, { passive: true });
 
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("scroll", handleScroll);
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-    };
-  }, [isHeaderScrolling]);
+  //   return () => {
+  //     window.removeEventListener("wheel", handleWheel);
+  //     window.removeEventListener("scroll", handleScroll);
+  //     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+  //   };
+  // }, [isHeaderScrolling]);
 
   // Reset header scrolling when user clicks on a navigation item
   const handleNavClick = (option: number) => {
     setSelectedOption(option);
-    setIsHeaderScrolling(true);
+    // setIsHeaderScrolling(true);
   };
 
   const tokenData: TokenData = {
@@ -1132,15 +1126,15 @@ export default function Header() {
   // Now use the memoized sections in the render function
   return (
     <div className="font-font-2">
-      <div className="min-h-screen flex flex-col w-full overflow-x-hidden">
+      <div className="flex flex-col w-full">
         <motion.div
           className="w-full z-50 sticky top-0"
           initial="hidden"
           animate="visible"
           variants={headerVariants}
-          style={{
-            boxShadow: headerShadow,
-          }}
+          // style={{
+          //   boxShadow: headerShadow,
+          // }}
         >
           <motion.div className="flex flex-row items-center justify-between px-3 sm:px-5 lg:px-20 py-3 bg-white">
             {/* Logo */}
@@ -1487,63 +1481,38 @@ export default function Header() {
                       },
                     },
                   }}
-                  className="h-full w-full"
+                  className="h-[800px] w-full overflow-y-auto"
                 >
-                  <div className="h-[80vh] w-full ">
-                    <Swiper
-                      grabCursor={true}
-                      centeredSlides={true}
-                      slidesPerView={1}
-                      breakpoints={{
-                        300: { slidesPerView: 3 },
-                        1024: { slidesPerView: 4 },
-                      }}
-                      autoplay={{
-                        delay: 1000,
-                        disableOnInteraction: false,
-                      }}
-                      direction="vertical"
-                      loop={true}
-                      spaceBetween={20}
-                      modules={[Pagination, Navigation, Autoplay]}
-                      // pagination={{
-                      //   clickable: true,
-                      //   dynamicBullets: false,
-                      // }}
-                      className="w-full h-full"
+                  {DATA.faqData.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex justify-center items-center w-full mb-5"
                     >
-                      {DATA.faqData.map((item) => (
-                        <SwiperSlide
-                          key={item.id}
-                          className="flex justify-center items-center !h-64 w-full !-translate-y-32"
-                        >
-                          <motion.div
-                            key={`motion-${item.id}`}
-                            className="bg-[#4AA76C] text-white rounded-lg p-6 w-full h-full"
-                            variants={{
-                              hidden: { opacity: 0, y: 20 },
-                              visible: { opacity: 1, y: 0 },
-                            }}
-                            whileHover={{
-                              boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
-                            }}
-                          >
-                            <div className="text-2xl font-font-2-extra-bold mb-5">
-                              {item.title}
-                            </div>
-                            <div className="text-[18px]">{item.answer}</div>
-                          </motion.div>
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                  </div>
+                      <motion.div
+                        key={`motion-${item.id}`}
+                        className="bg-[#4AA76C] text-white rounded-lg p-6 w-full h-full"
+                        variants={{
+                          hidden: { opacity: 0, y: 20 },
+                          visible: { opacity: 1, y: 0 },
+                        }}
+                        whileHover={{
+                          boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
+                        }}
+                      >
+                        <div className="text-2xl font-font-2-extra-bold mb-5">
+                          {item.title}
+                        </div>
+                        <div className="text-[18px]">{item.answer}</div>
+                      </motion.div>
+                    </div>
+                  ))}
                 </motion.div>
               </motion.div>
             </div>
           )}
 
           {selectedOption === 5 && (
-            <div className="col-span-12 lx-auto relative px-5 lg:px-20 lg:pr-28 pt-20 text-white pb-20">
+            <div className="col-span-12 lx-auto relative px-5 lg:px-20 lg:pr-28 pt-10 text-white pb-20">
               <motion.div
                 className="font-font-2-black text-6xl mb-7"
                 initial="initial"
