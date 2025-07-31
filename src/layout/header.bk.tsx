@@ -99,7 +99,6 @@ export default function Header() {
         });
       } else {
         setSelectedOption((prev) => {
-          // If we've reached the first option and scrolling up, allow normal scrolling
           if (prev <= 0) {
             return prev;
           }
@@ -115,7 +114,6 @@ export default function Header() {
       }, 700);
     };
 
-    // Handle regular scroll for mobile/touch devices
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
