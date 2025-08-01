@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.5",
@@ -18,7 +19,17 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.5",
     "@radix-ui/react-tooltip": "^1.1.7",
+    "@rainbow-me/rainbowkit": "^2.2.8",
+    "@solana/wallet-adapter-backpack": "^0.1.14",
+    "@solana/wallet-adapter-base": "^0.9.27",
+    "@solana/wallet-adapter-phantom": "^0.9.28",
+    "@solana/wallet-adapter-react": "^0.15.39",
+    "@solana/wallet-adapter-react-ui": "^0.9.39",
+    "@solana/wallet-adapter-solflare": "^0.6.32",
+    "@solana/wallet-adapter-wallets": "^0.19.37",
+    "@solana/web3.js": "^1.98.2",
     "@tabler/icons-react": "^3.29.0",
+    "@tanstack/react-query": "^5.83.0",
     "@tsparticles/engine": "^3.8.0",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.0",
@@ -29,14 +40,16 @@
     "next": "15.1.6",
     "radix-ui": "^1.1.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "19.1.1",
     "react-fast-marquee": "^1.6.5",
     "react-hot-toast": "^2.5.1",
     "recharts": "^3.1.0",
     "set-up": "file:",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
-    "usehooks-ts": "^3.1.0"
+    "usehooks-ts": "^3.1.0",
+    "viem": "^2.33.1",
+    "wagmi": "^2.16.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -46,6 +59,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
+    "pino-pretty": "^13.1.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

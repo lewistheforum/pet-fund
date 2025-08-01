@@ -39,7 +39,7 @@ export function AnimatedSection({
             y: 0,
             transition: {
               duration: 0.6,
-              ease: "easeOut",
+
               delay,
             },
           },
@@ -52,7 +52,7 @@ export function AnimatedSection({
             y: 0,
             transition: {
               duration: 0.6,
-              ease: "easeOut",
+
               delay,
             },
           },
@@ -65,7 +65,7 @@ export function AnimatedSection({
             x: 0,
             transition: {
               duration: 0.6,
-              ease: "easeOut",
+
               delay,
             },
           },
@@ -78,7 +78,7 @@ export function AnimatedSection({
             x: 0,
             transition: {
               duration: 0.6,
-              ease: "easeOut",
+
               delay,
             },
           },
@@ -91,7 +91,7 @@ export function AnimatedSection({
             scale: 1,
             transition: {
               duration: 0.6,
-              ease: "easeOut",
+
               delay,
             },
           },

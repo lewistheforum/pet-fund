@@ -68,7 +68,11 @@ export default function B1() {
         </AnimatedSection>
         <AnimatedSection variant="fadeUp" delay={0.3}>
           <div className="mb-20">
-            <Marquee className="gap-5 pt-10" direction="left">
+            <Marquee
+              className="gap-5 pt-10"
+              direction="left"
+              pauseOnHover={true}
+            >
               {DATA.galleryItems.map((item, index) => (
                 <div
                   key={index}
