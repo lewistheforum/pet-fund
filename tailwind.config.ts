@@ -1,7 +1,8 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: [
+    darkMode: ["class"],
+    content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./layout/**/*.{ts,tsx}",
@@ -11,23 +12,66 @@ export default {
     "./src/**/*.{ts,tsx}",
   ],
   theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-      fontFamily: {
-        "font-1": "var(--font-font-1)",
-        "font-2": "var(--font-font-2)",
-        "font-2-bold": "var(--font-font-2-bold)",
-        "font-2-extra-bold": "var(--font-font-2-extra-bold)",
-        "font-2-black": "var(--font-font-2-black)",
-      },
-      screen: {
-        md: "790px",
-        "3xl": "1900px",
-      },
-    },
+  	extend: {
+  		colors: {
+  			background: 'hsl(var(--background))',
+  			foreground: 'hsl(var(--foreground))',
+  			card: {
+  				DEFAULT: 'hsl(var(--card))',
+  				foreground: 'hsl(var(--card-foreground))'
+  			},
+  			popover: {
+  				DEFAULT: 'hsl(var(--popover))',
+  				foreground: 'hsl(var(--popover-foreground))'
+  			},
+  			primary: {
+  				DEFAULT: 'hsl(var(--primary))',
+  				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			secondary: {
+  				DEFAULT: 'hsl(var(--secondary))',
+  				foreground: 'hsl(var(--secondary-foreground))'
+  			},
+  			muted: {
+  				DEFAULT: 'hsl(var(--muted))',
+  				foreground: 'hsl(var(--muted-foreground))'
+  			},
+  			accent: {
+  				DEFAULT: 'hsl(var(--accent))',
+  				foreground: 'hsl(var(--accent-foreground))'
+  			},
+  			destructive: {
+  				DEFAULT: 'hsl(var(--destructive))',
+  				foreground: 'hsl(var(--destructive-foreground))'
+  			},
+  			border: 'hsl(var(--border))',
+  			input: 'hsl(var(--input))',
+  			ring: 'hsl(var(--ring))',
+  			chart: {
+  				'1': 'hsl(var(--chart-1))',
+  				'2': 'hsl(var(--chart-2))',
+  				'3': 'hsl(var(--chart-3))',
+  				'4': 'hsl(var(--chart-4))',
+  				'5': 'hsl(var(--chart-5))'
+  			}
+  		},
+  		fontFamily: {
+  			'font-1': 'var(--font-font-1)',
+  			'font-2': 'var(--font-font-2)',
+  			'font-2-bold': 'var(--font-font-2-bold)',
+  			'font-2-extra-bold': 'var(--font-font-2-extra-bold)',
+  			'font-2-black': 'var(--font-font-2-black)'
+  		},
+  		screen: {
+  			md: '790px',
+  			'3xl': '1900px'
+  		},
+  		borderRadius: {
+  			lg: 'var(--radius)',
+  			md: 'calc(var(--radius) - 2px)',
+  			sm: 'calc(var(--radius) - 4px)'
+  		}
+  	}
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;

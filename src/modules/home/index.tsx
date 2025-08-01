@@ -14,7 +14,7 @@ import B9 from "../b9";
 
 export default function HomeClient() {
   return (
-    <div className="mx-auto min-h-screen max-w-[1990px]">
+    <div className="mx-auto min-h-screen max-w-[1990px] bg-[#252525]">
       <Header />
       <B1 />
       <B2 />

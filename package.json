@@ -37,6 +37,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.0.6",
     "lucide-react": "^0.474.0",
+    "motion": "^12.23.12",
     "next": "15.1.6",
     "radix-ui": "^1.1.2",
     "react": "^19.0.0",
@@ -47,6 +48,7 @@
     "set-up": "file:",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0",
     "viem": "^2.33.1",
     "wagmi": "^2.16.0"
