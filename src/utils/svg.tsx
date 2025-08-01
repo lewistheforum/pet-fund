@@ -45,6 +45,49 @@ const svg = {
       </defs>
     </svg>
   ),
+  docs: () => (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 26 26"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15.166 2.166H6.499C5.85 2.166 5.228 2.423 4.769 2.882C4.31 3.341 4.053 3.963 4.053 4.611V21.389C4.053 22.037 4.31 22.659 4.769 23.118C5.228 23.577 5.85 23.834 6.499 23.834H19.611C20.26 23.834 20.882 23.577 21.341 23.118C21.8 22.659 22.057 22.037 22.057 21.389V8.945L15.166 2.166Z"
+        fill="black"
+      />
+      <path
+        d="M15.166 2.166V8.945H22.057"
+        fill="white"
+        stroke="black"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.833 14.389H8.388"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.833 18.278H8.388"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10.611 10.5H9.388H8.388"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
   mcap: () => (
     <svg
       width="46"

@@ -9,15 +9,38 @@ import logo from "../../public/head/head-logo.png";
 import solana from "../../public/solana-sol-logo.svg";
 import usdc from "../../public/usd-coin-usdc-logo.svg";
 import "@/styles/button.css";
+
+// Wallet UI styles
+const walletButtonStyles = `
+  .wallet-connect-container .wallet-adapter-button {
+    width: 100% !important;
+    background-color: #4AA76C !important;
+    color: white !important;
+    font-weight: bold !important;
+    padding: 12px 24px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .wallet-connect-container .wallet-adapter-button:hover {
+    background-color: #3d8c5a !important;
+  }
+  
+  .wallet-connect-container .wallet-adapter-button-trigger {
+    width: 100% !important;
+  }
+`;
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { DATA } from "@/utils/data";
 
 // Wallet imports
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { mainnet, bsc } from "wagmi/chains";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 interface TokenData {
   totalTokensSold: number;
@@ -46,9 +69,6 @@ export default function Header() {
   const [selectedToken, setSelectedToken] = useState<string>("");
   const [purchaseAmountNew, setPurchaseAmountNew] = useState<string>("");
 
-  const [selectedWallet, setSelectedWallet] = useState<string>("");
-  const [showWalletOptions, setShowWalletOptions] = useState<boolean>(false);
-
   // Wallet hooks
   // EVM wallet hooks (Wagmi)
   const {
@@ -56,9 +76,7 @@ export default function Header() {
     isConnected: isEvmConnected,
     chain,
   } = useAccount();
-  const { connect: evmConnect, connectors } = useConnect();
   const { disconnect: evmDisconnect } = useDisconnect();
-  const { switchChain } = useSwitchChain();
 
   // Solana wallet hooks
   const {
@@ -266,8 +284,6 @@ export default function Header() {
     setSelectedNetwork(networkCode);
     setSelectedToken(""); // Reset token when network changes
     // Reset wallet connection will be handled by real wallet state
-    setSelectedWallet(""); // Reset selected wallet
-    setShowWalletOptions(false); // Hide wallet options
     setCurrentStep(2);
   }, []);
 
@@ -298,66 +314,20 @@ export default function Header() {
     }
   }, [currentStep]);
 
-  const connectWallet = useCallback(
-    async (walletType?: string) => {
-      const wallet = walletType || selectedWallet;
-
-      try {
-        if (selectedNetwork === "SOLANA") {
-          // Solana wallet connection
-          setSolanaModalVisible(true);
-          setSelectedWallet(wallet);
-          setShowWalletOptions(false);
-        } else {
-          // EVM wallet connection (Ethereum/BSC)
-          const targetChainId =
-            selectedNetwork === "ETHEREUM" ? mainnet.id : bsc.id;
-
-          // Find the right connector
-          let connector;
-          if (wallet === "MetaMask") {
-            connector = connectors.find(
-              (c) => c.id === "metaMask" || c.name.includes("MetaMask")
-            );
-          } else if (wallet === "WalletConnect") {
-            connector = connectors.find((c) => c.id === "walletConnect");
-          } else if (wallet === "Coinbase Wallet") {
-            connector = connectors.find((c) => c.id === "coinbaseWallet");
-          } else if (wallet === "Trust Wallet") {
-            connector = connectors.find((c) => c.name.includes("Trust"));
-          }
-
-          if (connector) {
-            await evmConnect({ connector });
-
-            // Switch to correct network if needed
-            if (chain?.id !== targetChainId) {
-              await switchChain({ chainId: targetChainId });
-            }
-
-            setSelectedWallet(wallet);
-            setShowWalletOptions(false);
-            console.log(`Connected ${wallet} wallet for ${selectedNetwork}`);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to connect wallet:", error);
+  const connectWallet = useCallback(async () => {
+    try {
+      if (selectedNetwork === "SOLANA") {
+        // Solana wallet connection is now handled by WalletMultiButton
+        setSolanaModalVisible(true);
+      } else {
+        // EVM wallet connection is now handled by ConnectButton
+        // This function is mainly for programmatic connections
+        console.log(`EVM wallet connection handled by RainbowKit`);
       }
-    },
-    [
-      selectedNetwork,
-      selectedWallet,
-      setSolanaModalVisible,
-      evmConnect,
-      connectors,
-      chain,
-      switchChain,
-    ]
-  );
-
-  const showWalletSelector = useCallback(() => {
-    setShowWalletOptions(true);
-  }, []);
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+    }
+  }, [selectedNetwork, setSolanaModalVisible]);
 
   // Helper function to check if wallet is connected for current network
   const isWalletConnectedForNetwork = useCallback(() => {
@@ -397,9 +367,6 @@ export default function Header() {
       } else if (isEvmConnected) {
         await evmDisconnect();
       }
-
-      setSelectedWallet("");
-      setShowWalletOptions(false);
     } catch (error) {
       console.error("Failed to disconnect wallet:", error);
     }
@@ -410,67 +377,6 @@ export default function Header() {
     solanaDisconnect,
     evmDisconnect,
   ]);
-
-  const getWalletOptions = useCallback(() => {
-    switch (selectedNetwork) {
-      case "SOLANA":
-        return [
-          {
-            name: "Phantom",
-            icon: "🟣",
-            description: "Popular Solana wallet",
-          },
-          {
-            name: "Solflare",
-            icon: "🌟",
-            description: "Multi-platform Solana wallet",
-          },
-          {
-            name: "Backpack",
-            icon: "🎒",
-            description: "Modern Solana wallet",
-          },
-        ];
-      case "ETHEREUM":
-        return [
-          {
-            name: "MetaMask",
-            icon: "🦊",
-            description: "Most popular Ethereum wallet",
-          },
-          {
-            name: "WalletConnect",
-            icon: "🔗",
-            description: "Connect multiple wallets",
-          },
-          {
-            name: "Coinbase Wallet",
-            icon: "🔵",
-            description: "Coinbase's self-custody wallet",
-          },
-        ];
-      case "BSC":
-        return [
-          {
-            name: "MetaMask",
-            icon: "🦊",
-            description: "Configure for BSC network",
-          },
-          {
-            name: "Trust Wallet",
-            icon: "🛡️",
-            description: "Binance's official wallet",
-          },
-          {
-            name: "WalletConnect",
-            icon: "🔗",
-            description: "Connect multiple wallets",
-          },
-        ];
-      default:
-        return [];
-    }
-  }, [selectedNetwork]);
 
   const handleBuy = useCallback(() => {
     const isConnected = isWalletConnectedForNetwork();
@@ -831,33 +737,6 @@ export default function Header() {
     },
   };
 
-  // Connect wallet button variants
-  const connectButtonVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        delay: 0.9,
-        type: "spring" as const,
-        stiffness: 200,
-        damping: 15,
-      },
-    },
-    hover: {
-      scale: 1.05,
-      boxShadow: "0px 10px 25px rgba(74, 167, 108, 0.35)",
-      transition: {
-        type: "spring" as const,
-        stiffness: 400,
-        damping: 10,
-      },
-    },
-    tap: {
-      scale: 0.98,
-    },
-  };
-
   // Feature item variants
   const featureItemContainerVariants = {
     hidden: { opacity: 0 },
@@ -1159,16 +1038,19 @@ export default function Header() {
             >
               {/* Simplified Step Progress */}
               <div className="mb-6">
-                <div className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                <div className="grid grid-cols-4 gap-4 bg-gray-50 rounded-lg p-4">
                   {[
                     { step: 1, icon: "⚡", label: "Network" },
                     { step: 2, icon: "○", label: "Token" },
                     { step: 3, icon: "#", label: "Amount" },
                     { step: 4, icon: "□", label: "Buy" },
-                  ].map((item, index) => (
-                    <div key={item.step} className="flex items-center flex-1">
+                  ].map((item) => (
+                    <div
+                      key={item.step}
+                      className="flex flex-col items-center justify-center text-center"
+                    >
                       <div
-                        className={`w-8 h-8 rounded border-2 flex items-center justify-center text-sm font-bold ${
+                        className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold mb-2 ${
                           item.step <= currentStep
                             ? "bg-[#4AA76C] text-white border-[#4AA76C]"
                             : "bg-white text-gray-400 border-gray-300"
@@ -1177,7 +1059,7 @@ export default function Header() {
                         {item.step <= currentStep ? "✓" : item.step}
                       </div>
                       <span
-                        className={`ml-2 text-sm font-medium ${
+                        className={`text-sm font-medium whitespace-nowrap ${
                           item.step <= currentStep
                             ? "text-[#4AA76C]"
                             : "text-gray-400"
@@ -1185,9 +1067,6 @@ export default function Header() {
                       >
                         {item.label}
                       </span>
-                      {index < 3 && (
-                        <div className="flex-1 mx-2 h-px bg-gray-300"></div>
-                      )}
                     </div>
                   ))}
                 </div>
@@ -1196,7 +1075,7 @@ export default function Header() {
               {/* Step Content */}
               {currentStep === 1 && (
                 <div className="space-y-4">
-                  <h4 className="text-lg font-bold text-black mb-4">
+                  <h4 className="text-base font-bold text-black mb-3">
                     Select Network
                   </h4>
 
@@ -1205,7 +1084,7 @@ export default function Header() {
                       <button
                         key={network.code}
                         onClick={() => handleNetworkSelect(network.code)}
-                        className={`p-3 border-2 rounded-lg transition-all ${
+                        className={`p-2 border-2 rounded-lg transition-all ${
                           selectedNetwork === network.code
                             ? "border-[#4AA76C] bg-[#4AA76C] text-white"
                             : "border-gray-200 bg-white text-black hover:border-gray-300"
@@ -1213,14 +1092,14 @@ export default function Header() {
                       >
                         <div className="flex flex-col items-center space-y-2">
                           <div
-                            className={`w-8 h-8 rounded flex items-center justify-center object-contain ${
+                            className={`w-6 h-6 rounded flex items-center justify-center object-contain ${
                               selectedNetwork === network.code ? "" : ""
                             }`}
                           >
                             {network.icon}
                           </div>
                           <div className="text-center">
-                            <div className="font-semibold text-sm">
+                            <div className="font-semibold text-xs">
                               {network.name}
                             </div>
                           </div>
@@ -1234,7 +1113,7 @@ export default function Header() {
               {currentStep === 2 && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-bold text-black">
+                    <h4 className="text-base font-bold text-black">
                       Select Token
                     </h4>
                     <span className="text-sm text-gray-500">
@@ -1247,7 +1126,7 @@ export default function Header() {
                       <button
                         key={token.code}
                         onClick={() => handleTokenSelect(token.code)}
-                        className={`flex-1 p-2 border-2 rounded-lg transition-all ${
+                        className={`flex-1 p-1.5 border-2 rounded-lg transition-all ${
                           selectedToken === token.code
                             ? "border-[#4AA76C] bg-[#4AA76C] text-white"
                             : "border-gray-200 bg-white text-black hover:border-gray-300"
@@ -1255,7 +1134,7 @@ export default function Header() {
                       >
                         <div className="flex flex-col items-center space-y-1">
                           <div
-                            className={`w-8 h-8 rounded flex items-center justify-center ${
+                            className={`w-6 h-6 rounded flex items-center justify-center ${
                               selectedToken === token.code ? "" : ""
                             }`}
                           >
@@ -1273,7 +1152,7 @@ export default function Header() {
 
                   <button
                     onClick={handlePreviousStep}
-                    className="w-full py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all"
+                    className="w-full py-1.5 px-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all"
                   >
                     ← Back
                   </button>
@@ -1282,34 +1161,23 @@ export default function Header() {
 
               {currentStep === 3 && (
                 <div className="space-y-4">
-                  <h4 className="text-lg font-bold text-black">Enter Amount</h4>
+                  <h4 className="text-base font-bold text-black">
+                    Enter Amount
+                  </h4>
 
                   {/* Amount Input */}
                   <div className="space-y-3">
-                    <div className="border-2 border-gray-200 rounded-lg p-4 focus-within:border-[#4AA76C]">
+                    <div className="border-2 border-gray-200 rounded-lg p-3 focus-within:border-[#4AA76C]">
                       <input
                         type="text"
                         value={purchaseAmountNew}
                         onChange={handleAmountChange}
-                        className="w-full text-2xl font-bold text-black bg-transparent outline-none text-center"
+                        className="w-full text-lg font-bold text-black bg-transparent outline-none text-center"
                         placeholder="0.00"
                       />
                       <div className="text-center mt-1 text-gray-500">
                         {selectedToken}
                       </div>
-                    </div>
-
-                    {/* Quick Amounts */}
-                    <div className="grid grid-cols-3 gap-2">
-                      {["0.1", "0.5", "1.0"].map((amount) => (
-                        <button
-                          key={amount}
-                          onClick={() => setPurchaseAmountNew(amount)}
-                          className="py-2 px-3 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm"
-                        >
-                          {amount}
-                        </button>
-                      ))}
                     </div>
                   </div>
 
@@ -1320,7 +1188,7 @@ export default function Header() {
                         <div className="text-sm text-gray-600 mb-1">
                           You will receive:
                         </div>
-                        <div className="text-xl font-bold text-[#4AA76C]">
+                        <div className="text-lg font-bold text-[#4AA76C]">
                           {(
                             parseFloat(purchaseAmountNew) /
                             tokenData.currentPrice
@@ -1338,7 +1206,7 @@ export default function Header() {
                   <div className="flex space-x-3">
                     <button
                       onClick={handlePreviousStep}
-                      className="flex-1 py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
+                      className="flex-1 py-1.5 px-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
                     >
                       ← Back
                     </button>
@@ -1348,7 +1216,7 @@ export default function Header() {
                         !purchaseAmountNew ||
                         isNaN(parseFloat(purchaseAmountNew))
                       }
-                      className={`flex-2 py-2 px-6 rounded-lg font-semibold ${
+                      className={`flex-2 py-1.5 px-4 rounded-lg font-semibold ${
                         purchaseAmountNew &&
                         !isNaN(parseFloat(purchaseAmountNew))
                           ? "bg-[#4AA76C] text-white hover:bg-[#3d8c5a]"
@@ -1363,120 +1231,211 @@ export default function Header() {
 
               {currentStep === 4 && (
                 <div className="space-y-4">
-                  <h4 className="text-lg font-bold text-black">BUY $PETF</h4>
+                  <h4 className="text-base font-bold text-black">BUY $PETF</h4>
 
-                  {/* Order Summary */}
-                  <div className="bg-gray-50 border rounded-lg p-4">
-                    <h5 className="font-semibold text-black mb-3">
-                      Order Summary
-                    </h5>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Network:</span>
-                        <span className="font-semibold text-black">
-                          {selectedNetwork}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Token:</span>
-                        <span className="font-semibold text-black">
-                          {selectedToken}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Amount:</span>
-                        <span className="font-semibold text-black">
-                          {purchaseAmountNew} {selectedToken}
-                        </span>
-                      </div>
-                      <div className="flex justify-between pt-2 border-t">
-                        <span className="text-gray-600">
-                          You&apos;ll receive:
-                        </span>
-                        <span className="font-bold text-[#4AA76C]">
-                          {purchaseAmountNew &&
-                          !isNaN(parseFloat(purchaseAmountNew))
-                            ? (
-                                parseFloat(purchaseAmountNew) /
-                                tokenData.currentPrice
-                              ).toFixed(2)
-                            : "0.00"}{" "}
-                          $PETF
-                        </span>
-                      </div>
+                  {/* Wallet Connection */}
+                  <div className="space-y-4">
+                    <div className="text-center">
+                      {/* Network & Wallet Status Card */}
+                      {selectedNetwork ? (
+                        <div className="mb-4">
+                          {selectedNetwork === "SOLANA" ? (
+                            // Solana Network Card
+                            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 flex items-center justify-center rounded-full">
+                                    <Image
+                                      src={solana}
+                                      alt="Solana"
+                                      width={20}
+                                      height={20}
+                                    />
+                                  </div>
+                                  <div>
+                                    <div className="text-sm text-gray-600">
+                                      Network
+                                    </div>
+                                    <div className="font-bold text-gray-900">
+                                      Solana
+                                    </div>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => setCurrentStep(1)}
+                                  className="text-sm text-gray-500 hover:text-[#4AA76C] transition-colors"
+                                >
+                                  Change
+                                </button>
+                              </div>
+
+                              {isSolanaConnected && solanaAddress ? (
+                                <div className="space-y-3">
+                                  <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                                    <div className="flex items-center space-x-2">
+                                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                      <div>
+                                        <div className="text-sm font-medium text-green-800">
+                                          ✓ Wallet Connected
+                                        </div>
+                                        <div className="text-xs text-green-600 font-mono">
+                                          {solanaAddress.toString().slice(0, 6)}
+                                          ...
+                                          {solanaAddress.toString().slice(-4)}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <button
+                                      onClick={() => disconnectWallet()}
+                                      className="text-xs text-green-600 hover:text-green-700 transition-colors"
+                                    >
+                                      Disconnect
+                                    </button>
+                                  </div>
+                                  <button
+                                    onClick={handleBuy}
+                                    className="w-full bg-[#4AA76C] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#3d8c5a] transition-all"
+                                  >
+                                    BUY $PETF TOKENS
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="wallet-connect-container">
+                                  <WalletMultiButton className="!w-full !bg-[#4AA76C] !text-white !font-bold !py-3 !px-6 !rounded-lg hover:!bg-[#3d8c5a] !transition-all" />
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            // EVM Network Card
+                            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 flex items-center justify-center">
+                                    {selectedNetwork === "ETHEREUM" && (
+                                      <div className="scale-90">
+                                        {svg.head_eth()}
+                                      </div>
+                                    )}
+                                    {selectedNetwork === "BSC" && (
+                                      <div className="scale-90">
+                                        {svg.head_bnb()}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <div className="text-sm text-gray-600">
+                                      Network
+                                    </div>
+                                    <div className="font-bold text-gray-900">
+                                      {selectedNetwork === "ETHEREUM" &&
+                                        "Ethereum"}
+                                      {selectedNetwork === "BSC" && "BSC"}
+                                    </div>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => setCurrentStep(1)}
+                                  className="text-sm text-gray-500 hover:text-[#4AA76C] transition-colors"
+                                >
+                                  Change
+                                </button>
+                              </div>
+
+                              <ConnectButton.Custom>
+                                {({
+                                  account,
+                                  chain,
+                                  openAccountModal,
+                                  openChainModal,
+                                  openConnectModal,
+                                  authenticationStatus,
+                                  mounted,
+                                }) => {
+                                  const ready =
+                                    mounted &&
+                                    authenticationStatus !== "loading";
+                                  const connected =
+                                    ready &&
+                                    account &&
+                                    chain &&
+                                    (!authenticationStatus ||
+                                      authenticationStatus === "authenticated");
+
+                                  if (!connected) {
+                                    return (
+                                      <button
+                                        onClick={openConnectModal}
+                                        className="w-full bg-[#4AA76C] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#3d8c5a] transition-all"
+                                      >
+                                        Connect Wallet
+                                      </button>
+                                    );
+                                  }
+
+                                  if (chain.unsupported) {
+                                    return (
+                                      <button
+                                        onClick={openChainModal}
+                                        className="w-full bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition-all"
+                                      >
+                                        Switch Network
+                                      </button>
+                                    );
+                                  }
+
+                                  return (
+                                    <div className="space-y-3">
+                                      <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <div className="flex items-center space-x-2">
+                                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                          <div>
+                                            <div className="text-sm font-medium text-green-800">
+                                              ✓ {account.displayName} Connected
+                                            </div>
+                                            <div className="text-xs text-green-600 font-mono">
+                                              {account.displayBalance}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <button
+                                          onClick={openAccountModal}
+                                          className="text-xs text-green-600 hover:text-green-700 transition-colors"
+                                        >
+                                          Manage
+                                        </button>
+                                      </div>
+                                      <button
+                                        onClick={handleBuy}
+                                        className="w-full bg-[#4AA76C] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#3d8c5a] transition-all"
+                                      >
+                                        BUY $PETF TOKENS
+                                      </button>
+                                    </div>
+                                  );
+                                }}
+                              </ConnectButton.Custom>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8">
+                          <div className="text-gray-600 mb-4">
+                            Please select a network first
+                          </div>
+                          <button
+                            onClick={() => setCurrentStep(1)}
+                            className="bg-[#4AA76C] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#3d8c5a] transition-all"
+                          >
+                            Go to Step 1: Select Network
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Wallet Connection */}
-                  {!isWalletConnectedForNetwork() ? (
-                    !showWalletOptions ? (
-                      <button
-                        onClick={showWalletSelector}
-                        className="w-full bg-[#4AA76C] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#3d8c5a] transition-all"
-                      >
-                        Connect Wallet
-                      </button>
-                    ) : (
-                      <div className="space-y-3">
-                        <h5 className="font-semibold text-black">
-                          Choose Wallet:
-                        </h5>
-                        {getWalletOptions().map((wallet) => (
-                          <button
-                            key={wallet.name}
-                            onClick={() => connectWallet(wallet.name)}
-                            className="w-full p-3 bg-white border-2 border-gray-200 rounded-lg hover:border-[#4AA76C] transition-all flex items-center space-x-3"
-                          >
-                            <span className="text-lg">{wallet.icon}</span>
-                            <span className="font-semibold text-black">
-                              {wallet.name}
-                            </span>
-                          </button>
-                        ))}
-                        <button
-                          onClick={() => setShowWalletOptions(false)}
-                          className="w-full py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
-                        >
-                          ← Back
-                        </button>
-                      </div>
-                    )
-                  ) : (
-                    <div className="space-y-3">
-                      {/* Connected State */}
-                      <div className="bg-green-50 border border-[#4AA76C] rounded-lg p-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-semibold text-black">
-                              ✓ {selectedWallet} Connected
-                            </div>
-                            <div className="text-sm text-gray-600 font-mono">
-                              {getCurrentWalletAddress()?.slice(0, 8)}...
-                              {getCurrentWalletAddress()?.slice(-6)}
-                            </div>
-                          </div>
-                          <button
-                            onClick={disconnectWallet}
-                            className="text-red-600 hover:text-red-800 text-sm"
-                          >
-                            Disconnect
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Buy Button */}
-                      <button
-                        onClick={handleBuy}
-                        className="w-full bg-[#4AA76C] text-white font-bold py-4 px-6 rounded-lg hover:bg-[#3d8c5a] transition-all text-lg"
-                      >
-                        BUY $PETF TOKENS
-                      </button>
-                    </div>
-                  )}
-
                   <button
                     onClick={handlePreviousStep}
-                    className="w-full py-2 px-4 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
+                    className="w-full py-1.5 px-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200"
                   >
                     ← Back
                   </button>
@@ -1529,8 +1488,7 @@ export default function Header() {
       evmAddress,
       solanaAddress,
       chain,
-      selectedWallet,
-      showWalletOptions,
+
       tokenData.currentPrice,
       tokenData.totalTokensSold,
       tokenData.nextPrice,
@@ -1547,8 +1505,7 @@ export default function Header() {
       handleBuy,
       getAvailableTokens,
       getStepTitle,
-      showWalletSelector,
-      getWalletOptions,
+
       isWalletConnectedForNetwork,
       getCurrentWalletAddress,
       disconnectWallet,
@@ -1662,18 +1619,6 @@ export default function Header() {
               </motion.div>
             </motion.div>
           </div>
-          <motion.div className="w-full flex justify-center items-center">
-            <motion.button
-              className="button-connect font-font-2-extra-bold !text-3xl"
-              variants={connectButtonVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              CONNECT WALLET
-            </motion.button>
-          </motion.div>
         </motion.div>
       </div>
     ),
@@ -1684,6 +1629,10 @@ export default function Header() {
   // Now use the memoized sections in the render function
   return (
     <div className="font-font-2">
+      {/* Inject wallet styles */}
+      <style jsx global>
+        {walletButtonStyles}
+      </style>
       <div className="flex flex-col w-full">
         <motion.div
           className="w-full z-50 sticky top-0"
@@ -1791,28 +1740,6 @@ export default function Header() {
                 animate="visible"
               >
                 <motion.div
-                  className="cursor-pointer hidden lg:flex"
-                  variants={socialIconVariants}
-                  whileHover="hover"
-                >
-                  {svg.dexs()}
-                </motion.div>
-                <motion.div
-                  className="cursor-pointer hidden lg:flex"
-                  variants={socialIconVariants}
-                  whileHover="hover"
-                >
-                  {svg.mcap()}
-                </motion.div>
-                <motion.button
-                  className="button !font-bold"
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  BUY $PETF
-                </motion.button>
-                <motion.div
                   className="hidden lg:flex"
                   variants={socialIconVariants}
                   whileHover="hover"
@@ -1863,6 +1790,7 @@ export default function Header() {
           <div className="hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg">
             <div>{svg.x()}</div>
             <div>{svg.tele()}</div>
+            <div>{svg.docs()}</div>
           </div>
 
           {/* Use memoized sections instead of regular JSX */}
