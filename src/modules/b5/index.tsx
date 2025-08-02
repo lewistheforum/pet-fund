@@ -76,13 +76,47 @@ export default function B5() {
           <AnimatedSection variant="fadeRight" delay={0.2}>
             <div className="flex flex-col justify-end gap-5 px-10 pt-10 pb-5 border border-white rounded-2xl h-[370px] lg:h-[500px]">
               <AnimatedSection variant="scale" delay={0.3}>
-                <div className="relative w-full h-full flex items-center justify-center">
+                {/* <div className="relative w-full h-full flex items-center justify-center">
                   {svg.b5_full_chart()}
+                </div> */}
+
+                <div className="relative w-full lg:w-[598px] h-[200px] lg:h-[250px]">
+                  <div className="absolute top-[50%] lg:top-1/2 left-1/3 lg:left-[50%] 2xl:left-[55%] -translate-x-1/2 -translate-y-1/2 w-full h-full">
+                    {/* 30% segment - Cyan */}
+                    <div className="absolute -top-[53px] -right-[81px] lg:-top-[66px] lg:-right-[27px] w-[82%] h-[82%]">
+                      {svg.b5_30()}
+                    </div>
+
+                    {/* 20% segment - Yellow */}
+                    <div className="absolute bottom-0 -right-[45px] lg:right-[44px] w-[60%] h-[60%]">
+                      {svg.b5_20_y()}
+                    </div>
+
+                    {/* 20% segment - Green */}
+                    <div className="absolute bottom-0 left-[40px] lg:left-[43px] w-[60%] h-[60%]">
+                      {svg.b5_20_g()}
+                    </div>
+
+                    {/* 10% segment - Orange */}
+                    <div className="absolute top-[37.5px] lg:top-[46px] left-[57px] lg:left-[92px] w-[37%] h-[37%]">
+                      {svg.b5_10()}
+                    </div>
+
+                    {/* 5% segment - Pink */}
+                    <div className="absolute -top-[2px] left-[66px] lg:-top-[0px] lg:left-[111px] w-[36%] h-[36%] lg:w-[34%] lg:h-[34%]">
+                      {svg.b5_5()}
+                    </div>
+
+                    {/* 15% segment - Purple */}
+                    <div className="absolute -top-[53px] left-[54px] lg:-top-[66px] lg:left-[65px] w-[57%] h-[57%]">
+                      {svg.b5_15()}
+                    </div>
+                  </div>
                 </div>
               </AnimatedSection>
               <AnimatedSection variant="fadeUp" delay={0.5}>
                 <div className="relative w-full h-full flex items-center justify-center">
-                  {svg.b5_stat_desc()}
+                  {svg.b5_stat_desc_6()}
                 </div>
               </AnimatedSection>
             </div>

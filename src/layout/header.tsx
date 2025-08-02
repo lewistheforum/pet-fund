@@ -878,7 +878,7 @@ export default function Header() {
       <div className="col-span-12 lg:col-span-6 relative flex flex-col justify-start pt-0 lg:pt-10 pb-10 lg:pb-0 px-5 lg:px-0 lg:pr-14 gap-5">
         <>
           <motion.div
-            className="w-full lg:w-3/4 mx-auto border border-[#4AA76C] rounded-xl shadow-2xl px-8 py-3 font-sans mt-10 lg:mt-0"
+            className="w-full lg:w-3/4 mx-auto border border-[#4AA76C] rounded-xl shadow-2xl px-4 lg:px-8 py-3 font-sans mt-10 lg:mt-0"
             initial="initial"
             animate="animate"
             exit="exit"
@@ -888,7 +888,7 @@ export default function Header() {
               boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-col gap-2 lg:gap-0 lg:flex-row items-center justify-between">
               <div className="flex flex-row items-center gap-2">
                 <div>{svg.head_petf()}</div>
                 <div className="text-2xl font-font-2-extra-bold text-[#4AA76C]">
@@ -1092,7 +1092,7 @@ export default function Header() {
                       >
                         <div className="flex flex-col items-center space-y-2">
                           <div
-                            className={`w-6 h-6 rounded flex items-center justify-center object-contain ${
+                            className={`w-8 h-8 rounded flex items-center justify-center object-contain ${
                               selectedNetwork === network.code ? "" : ""
                             }`}
                           >
@@ -1134,7 +1134,7 @@ export default function Header() {
                       >
                         <div className="flex flex-col items-center space-y-1">
                           <div
-                            className={`w-6 h-6 rounded flex items-center justify-center ${
+                            className={`w-8 h-8 rounded flex items-center justify-center ${
                               selectedToken === token.code ? "" : ""
                             }`}
                           >
@@ -1730,7 +1730,7 @@ export default function Header() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  [STACKING]
+                  [STAKING]
                 </motion.div>
               </motion.div>
               <motion.div
@@ -2021,7 +2021,7 @@ export default function Header() {
                 once the claiming phase goes live.
               </motion.div>
               <motion.div
-                className="flex flex-row justify-between items-center w-full gap-24"
+                className="flex flex-col lg:flex-row justify-between items-center w-full gap-5 lg:gap-24"
                 variants={stakingColumnsContainerVariants}
                 initial="hidden"
                 animate="visible"
@@ -2110,16 +2110,16 @@ export default function Header() {
 
               {/* CHART SUPPLY STATISTICS BY DAY */}
               <motion.div
-                className="w-full mt-10 rounded-xl mx-auto p-6 bg-white border-[2px] border-[#4AA76C]"
+                className="w-full mt-10 rounded-xl mx-auto p-6 sm:p-6 p-3 bg-white border-[2px] border-[#4AA76C]"
                 variants={chartContainerVariants}
                 initial="hidden"
                 animate="visible"
               >
                 {/* Chart Container */}
-                <div className="relative bg-white rounded-lg p-6">
+                <div className="relative bg-white rounded-lg p-6 sm:p-6 p-2">
                   {/* Title */}
                   <motion.h2
-                    className="text-xl font-bold text-center text-gray-800 mb-8 tracking-wide font-font-2-bold"
+                    className="text-xl font-bold text-center text-gray-800 mb-8 sm:mb-8 mb-4 tracking-wide font-font-2-bold"
                     initial={{ opacity: 0 }}
                     animate={{
                       opacity: 1,
@@ -2133,7 +2133,7 @@ export default function Header() {
                   <div className="relative">
                     {/* Y-Axis */}
                     <motion.div
-                      className="absolute -left-10 top-0 bottom-12 flex flex-row justify-between items-center"
+                      className="absolute -left-6 sm:-left-10 top-0 bottom-12 flex flex-row justify-between items-center"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{
                         opacity: 1,
@@ -2141,14 +2141,14 @@ export default function Header() {
                         transition: { delay: 1.2, duration: 0.5 },
                       }}
                     >
-                      <div className="-rotate-90 text-xl font-bold text-center text-gray-800 mb-0 tracking-wide uppercase font-font-2-bold">
+                      <div className="-rotate-90 text-sm sm:text-xl font-bold text-center text-gray-800 mb-0 tracking-wide uppercase font-font-2-bold">
                         Supply
                       </div>
-                      <div className="w-12 h-full flex flex-col justify-between text-sm text-gray-600">
+                      <div className="w-8 sm:w-12 h-full flex flex-col justify-between text-xs sm:text-sm text-gray-600">
                         {yAxisLabels.reverse().map((label, index) => (
                           <motion.div
                             key={index}
-                            className="text-right pr-2 -mt-2"
+                            className="text-right pr-1 sm:pr-2 -mt-2"
                             initial={{ opacity: 0 }}
                             animate={{
                               opacity: 1,
@@ -2165,7 +2165,7 @@ export default function Header() {
                     </motion.div>
 
                     {/* Grid Lines */}
-                    <div className="ml-24 relative h-80">
+                    <div className="ml-12 sm:ml-24 relative h-60 sm:h-80">
                       {/* Horizontal Grid Lines */}
                       {yAxisValues.map((value, index) => (
                         <motion.div
@@ -2199,14 +2199,15 @@ export default function Header() {
 
                       {/* Bars */}
                       <motion.div
-                        className="absolute inset-0 flex items-end gap-1 px-1"
+                        className="absolute inset-0 flex items-end gap-0.5 sm:gap-1 pl-5 sm:px-1"
                         variants={chartElementsVariants}
                         initial="hidden"
                         animate="visible"
                       >
                         {data.map((item, index) => {
-                          // Calculate height in pixels based on chart height (320px)
-                          const chartHeight = 320;
+                          // Calculate height in pixels based on chart height
+                          const chartHeight =
+                            window?.innerWidth < 640 ? 240 : 320;
                           const calculatedHeight =
                             (item.value / maxValue) * chartHeight;
                           const height = Math.max(calculatedHeight, 10);
@@ -2217,7 +2218,7 @@ export default function Header() {
                               className="flex-1 flex justify-center"
                             >
                               <motion.div
-                                className={`w-full max-w-[25%] rounded-t-full transition-all duration-300 ${
+                                className={`w-full sm:max-w-[25%] max-w-[45%] rounded-t-full transition-all duration-300 ${
                                   item.highlighted
                                     ? "bg-[#4AA76C] hover:bg-[#3a8959]"
                                     : "bg-gray-400 hover:bg-gray-500"
@@ -2246,7 +2247,7 @@ export default function Header() {
 
                     {/* X-Axis Labels */}
                     <motion.div
-                      className="ml-12 mt-4 flex"
+                      className="ml-14 sm:ml-12 mt-4 flex"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{
                         opacity: 1,
@@ -2254,43 +2255,57 @@ export default function Header() {
                         transition: { delay: 1.7, duration: 0.5 },
                       }}
                     >
-                      {data.map((item, index) => (
-                        <motion.div
-                          key={index}
-                          className="flex-1 text-center text-xs text-gray-600 transform origin-center"
-                          style={{ fontSize: "10px" }}
-                          initial={{ opacity: 0 }}
-                          animate={{
-                            opacity: 1,
-                            transition: {
-                              delay: 1.8 + index * 0.05,
-                              duration: 0.3,
-                            },
-                          }}
-                        >
-                          <span className="inline-block mt-2">{item.date}</span>
-                        </motion.div>
-                      ))}
+                      {data.map((item, index) => {
+                        // On mobile, only show every other label to avoid overcrowding
+                        const shouldShow =
+                          window?.innerWidth >= 640 || index % 2 === 0;
+                        // Format date differently based on screen size
+                        const formattedDate =
+                          window?.innerWidth < 640
+                            ? item.date.split("/").pop() // Only show month on mobile
+                            : item.date;
+
+                        return shouldShow ? (
+                          <motion.div
+                            key={index}
+                            className="flex-1 text-center text-[8px] sm:text-xs text-gray-600 transform origin-center"
+                            initial={{ opacity: 0 }}
+                            animate={{
+                              opacity: 1,
+                              transition: {
+                                delay: 1.8 + index * 0.05,
+                                duration: 0.3,
+                              },
+                            }}
+                          >
+                            <span className="inline-block mt-2 sm:transform-none transform -rotate-45 origin-top-left">
+                              {formattedDate}
+                            </span>
+                          </motion.div>
+                        ) : (
+                          <motion.div key={index} className="flex-1" />
+                        );
+                      })}
                     </motion.div>
                   </div>
                 </div>
 
                 {/* Legend/Info */}
                 <motion.div
-                  className="mt-4 text-center text-sm text-gray-600"
+                  className="mt-4 text-center text-xs sm:text-sm text-gray-600"
                   initial={{ opacity: 0 }}
                   animate={{
                     opacity: 1,
                     transition: { delay: 2.0, duration: 0.5 },
                   }}
                 >
-                  <div className="flex justify-center items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 bg-gray-400 rounded"></div>
+                  <div className="flex justify-center items-center gap-2 sm:gap-4 flex-wrap">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-400 rounded"></div>
                       <span>Regular Supply</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 bg-[#4AA76C] rounded"></div>
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#4AA76C] rounded"></div>
                       <span>Current Month</span>
                     </div>
                   </div>
@@ -2339,7 +2354,100 @@ export default function Header() {
             }}
           >
             <motion.li variants={mobileMenuItemVariants}>
-              <div>
+              <motion.div
+                className="flex flex-col items-center gap-5"
+                variants={navContainerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    handleNavClick(0);
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  [HOME]
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    handleNavClick(1);
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  [ABOUT]
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    scrollToSection("section-tokenomics");
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  [TOKENOMICS]
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    handleNavClick(3);
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  [HOW TO BUY]
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    handleNavClick(4);
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  [FAQ]
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    handleNavClick(5);
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  [STAKING]
+                </motion.div>
+              </motion.div>
+            </motion.li>
+            <motion.li variants={mobileMenuItemVariants}>
+              <div className="flex flex-col gap-2">
                 <motion.button
                   className="button !font-bold !m-0"
                   variants={buttonVariants}
