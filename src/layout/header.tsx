@@ -35,12 +35,62 @@ import { motion } from "framer-motion";
 import { DATA } from "@/utils/data";
 
 // Wallet imports
-import { useAccount, useDisconnect } from "wagmi";
+import {
+  useAccount,
+  useDisconnect,
+  useSendTransaction,
+  useSwitchChain,
+} from "wagmi";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { mainnet, bsc } from "wagmi/chains";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import {
+  Connection,
+  PublicKey,
+  Transaction,
+  SystemProgram,
+  LAMPORTS_PER_SOL,
+} from "@solana/web3.js";
+import { parseEther, parseUnits, encodeFunctionData } from "viem";
+
+// Token contract addresses
+const TOKEN_CONTRACTS = {
+  ETHEREUM: {
+    USDT: "0xdAC17F958D2ee523a2206206994597C13D831ec7", // 6 decimals
+    USDC: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // 6 decimals
+  },
+  BSC: {
+    USDT: "0x55d398326f99059fF775485246999027B3197955", // 18 decimals
+    USDC: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", // 18 decimals
+  },
+};
+
+// Token decimals
+const TOKEN_DECIMALS = {
+  ETHEREUM: {
+    USDT: 6,
+    USDC: 6,
+  },
+  BSC: {
+    USDT: 18,
+    USDC: 18,
+  },
+};
+
+// ERC-20 transfer function ABI
+const ERC20_TRANSFER_ABI = [
+  {
+    name: "transfer",
+    type: "function",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
+] as const;
 
 interface TokenData {
   totalTokensSold: number;
@@ -77,12 +127,15 @@ export default function Header() {
     chain,
   } = useAccount();
   const { disconnect: evmDisconnect } = useDisconnect();
+  const { sendTransaction } = useSendTransaction();
+  const { switchChain } = useSwitchChain();
 
   // Solana wallet hooks
   const {
     publicKey: solanaAddress,
     connected: isSolanaConnected,
     disconnect: solanaDisconnect,
+    sendTransaction: solanaSendTransaction,
   } = useWallet();
   const { setVisible: setSolanaModalVisible } = useWalletModal();
 
@@ -314,6 +367,10 @@ export default function Header() {
     }
   }, [currentStep]);
 
+  const handleDocsClick = useCallback(() => {
+    window.open("/PET FUND.pdf", "_blank");
+  }, []);
+
   const connectWallet = useCallback(async () => {
     try {
       if (selectedNetwork === "SOLANA") {
@@ -331,15 +388,35 @@ export default function Header() {
 
   // Helper function to check if wallet is connected for current network
   const isWalletConnectedForNetwork = useCallback(() => {
+    console.log("=== WALLET CONNECTION CHECK ===");
+    console.log("selectedNetwork:", selectedNetwork);
+
     if (selectedNetwork === "SOLANA") {
+      console.log(
+        "Checking Solana - isSolanaConnected:",
+        isSolanaConnected,
+        "solanaAddress:",
+        solanaAddress?.toString()
+      );
       return isSolanaConnected && solanaAddress;
     } else {
       // For EVM networks (Ethereum/BSC)
       const targetChainId =
         selectedNetwork === "ETHEREUM" ? mainnet.id : bsc.id;
-      return (
-        isEvmConnected && evmAddress && (!chain || chain.id === targetChainId)
+      console.log("Checking EVM - targetChainId:", targetChainId);
+      console.log("isEvmConnected:", isEvmConnected);
+      console.log("evmAddress:", evmAddress);
+      console.log("current chain:", chain);
+      console.log("chain.id:", chain?.id);
+      console.log(
+        "chain matches target:",
+        !chain || chain.id === targetChainId
       );
+
+      // Check if wallet is connected and has address (allow chain switching in buy function)
+      const result = isEvmConnected && evmAddress;
+      console.log("Final EVM result (basic check):", result);
+      return result;
     }
   }, [
     selectedNetwork,
@@ -378,21 +455,210 @@ export default function Header() {
     evmDisconnect,
   ]);
 
-  const handleBuy = useCallback(() => {
+  const handleBuy = useCallback(async () => {
+    console.log("=== DEBUG BUY FUNCTION ===");
+    console.log("selectedNetwork:", selectedNetwork);
+    console.log("selectedToken:", selectedToken);
+    console.log("purchaseAmountNew:", purchaseAmountNew);
+    console.log("isSolanaConnected:", isSolanaConnected);
+    console.log("solanaAddress:", solanaAddress?.toString());
+    console.log("solanaSendTransaction available:", !!solanaSendTransaction);
+
     const isConnected = isWalletConnectedForNetwork();
-    if (isConnected && purchaseAmountNew && selectedToken) {
-      const walletAddress = getCurrentWalletAddress();
-      console.log(
-        `Buying ${purchaseAmountNew} ${selectedToken} on ${selectedNetwork} with wallet ${walletAddress}`
-      );
-      // Buy logic would go here
+    console.log("isWalletConnectedForNetwork():", isConnected);
+
+    if (!isConnected || !purchaseAmountNew || !selectedToken) {
+      alert("Please ensure wallet is connected and amount is specified");
+      return;
+    }
+
+    try {
+      if (selectedNetwork === "SOLANA") {
+        console.log("=== SOLANA TRANSACTION START ===");
+        // Solana transfer
+        const connection = new Connection("https://solana-rpc.publicnode.com");
+        console.log("Connection created");
+        const toPublicKey = new PublicKey(
+          "Ctgf7xKSouNgbbnrQZxhpDiZU8vijD3jKKpSRUazbAsq"
+        );
+        console.log("toPublicKey:", toPublicKey.toString());
+        const fromPublicKey = solanaAddress;
+        console.log("fromPublicKey:", fromPublicKey?.toString());
+
+        if (!fromPublicKey) {
+          alert("Solana wallet not connected");
+          return;
+        }
+
+        const lamports = parseFloat(purchaseAmountNew) * LAMPORTS_PER_SOL;
+        const transaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: fromPublicKey,
+            toPubkey: toPublicKey,
+            lamports: lamports,
+          })
+        );
+
+        // Get recent blockhash
+        console.log("Getting recent blockhash...");
+        const { blockhash } = await connection.getLatestBlockhash();
+        console.log("Got blockhash:", blockhash);
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = fromPublicKey;
+        console.log("Transaction prepared");
+
+        // Sign and send transaction
+        console.log("About to sign transaction...");
+        console.log("solanaSendTransaction exists:", !!solanaSendTransaction);
+        if (solanaSendTransaction) {
+          console.log("Calling solanaSendTransaction...");
+          const signature = await solanaSendTransaction(
+            transaction,
+            connection
+          );
+          console.log("Solana transfer successful:", signature);
+          alert(`Transfer successful! Signature: ${signature}`);
+        } else {
+          console.log("solanaSendTransaction not available");
+          alert("Solana wallet not available");
+        }
+      } else if (selectedNetwork === "ETHEREUM" || selectedNetwork === "BSC") {
+        console.log("=== EVM TRANSACTION START ===");
+        console.log("selectedNetwork:", selectedNetwork);
+        console.log("current chain:", chain);
+
+        // Determine target chain
+        const targetChainId =
+          selectedNetwork === "ETHEREUM" ? mainnet.id : bsc.id;
+        console.log("targetChainId:", targetChainId);
+
+        // Check if we need to switch chain
+        if (chain?.id !== targetChainId) {
+          console.log(
+            "Need to switch chain from",
+            chain?.id,
+            "to",
+            targetChainId
+          );
+          try {
+            await switchChain({ chainId: targetChainId });
+            console.log("Chain switched successfully");
+            // Wait a bit for the chain switch to complete
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          } catch (error) {
+            console.error("Failed to switch chain:", error);
+            console.error("Chain switch error details:", error);
+            alert(
+              `Please manually switch to ${
+                selectedNetwork === "ETHEREUM" ? "Ethereum" : "BSC"
+              } network in your wallet and try again`
+            );
+            return;
+          }
+        } else {
+          console.log("Already on correct chain:", chain?.id);
+        }
+
+        console.log("selectedToken:", selectedToken);
+
+        const recipientAddress = "0x6a9DF30835c3EC39890f8Fc58F898503f5D724Ce";
+
+        // Determine if it's native token or ERC-20
+        const isNativeToken =
+          (selectedNetwork === "ETHEREUM" &&
+            (selectedToken === "ETHEREUM" || selectedToken === "ETH")) ||
+          (selectedNetwork === "BSC" &&
+            (selectedToken === "BSC" || selectedToken === "BNB"));
+
+        console.log("isNativeToken:", isNativeToken);
+        console.log("Token matching check:");
+        console.log(
+          "- selectedNetwork === 'ETHEREUM':",
+          selectedNetwork === "ETHEREUM"
+        );
+        console.log(
+          "- selectedToken === 'ETHEREUM':",
+          selectedToken === "ETHEREUM"
+        );
+        console.log("- selectedToken === 'ETH':", selectedToken === "ETH");
+        console.log("- selectedNetwork === 'BSC':", selectedNetwork === "BSC");
+        console.log("- selectedToken === 'BSC':", selectedToken === "BSC");
+        console.log("- selectedToken === 'BNB':", selectedToken === "BNB");
+
+        if (isNativeToken) {
+          // Native token transfer (ETH/BNB)
+          const value = parseEther(purchaseAmountNew);
+          console.log(
+            "Sending native token to:",
+            recipientAddress,
+            "value:",
+            value.toString()
+          );
+
+          await sendTransaction({
+            to: recipientAddress as `0x${string}`,
+            value: value,
+            chainId: targetChainId,
+          });
+        } else if (selectedToken === "USDT" || selectedToken === "USDC") {
+          // ERC-20 token transfer (USDT/USDC)
+          const contractAddress =
+            selectedNetwork === "ETHEREUM"
+              ? TOKEN_CONTRACTS.ETHEREUM[selectedToken as "USDT" | "USDC"]
+              : TOKEN_CONTRACTS.BSC[selectedToken as "USDT" | "USDC"];
+
+          const decimals =
+            selectedNetwork === "ETHEREUM"
+              ? TOKEN_DECIMALS.ETHEREUM[selectedToken as "USDT" | "USDC"]
+              : TOKEN_DECIMALS.BSC[selectedToken as "USDT" | "USDC"];
+
+          console.log(
+            `${selectedToken} decimals for ${selectedNetwork}:`,
+            decimals
+          );
+          const amount = parseUnits(purchaseAmountNew, decimals);
+          console.log(
+            `Sending ${selectedToken} to:`,
+            recipientAddress,
+            "amount:",
+            amount.toString()
+          );
+          console.log("Contract address:", contractAddress);
+
+          // Encode transfer function call
+          const data = encodeFunctionData({
+            abi: ERC20_TRANSFER_ABI,
+            functionName: "transfer",
+            args: [recipientAddress as `0x${string}`, amount],
+          });
+
+          await sendTransaction({
+            to: contractAddress as `0x${string}`,
+            data: data,
+            chainId: targetChainId,
+          });
+        } else {
+          throw new Error(`Unsupported token: ${selectedToken}`);
+        }
+
+        console.log(`${selectedNetwork} transfer successful`);
+        alert("Transfer successful!");
+      }
+    } catch (error) {
+      console.error("Transfer failed:", error);
+      alert("Transfer failed. Please try again.");
     }
   }, [
     isWalletConnectedForNetwork,
-    getCurrentWalletAddress,
     purchaseAmountNew,
     selectedToken,
     selectedNetwork,
+    solanaAddress,
+    sendTransaction,
+    solanaSendTransaction,
+    chain,
+    switchChain,
+    isSolanaConnected,
   ]);
 
   const getAvailableTokens = useCallback(() => {
@@ -1787,10 +2053,15 @@ export default function Header() {
             className="object-cover lg:object-right"
           />
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black via-black/50 to-black/20 z-0" />
-          <div className="hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg">
+          <div className="z-[1000] hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg">
             <div>{svg.x()}</div>
             <div>{svg.tele()}</div>
-            <div>{svg.docs()}</div>
+            <div
+              onClick={handleDocsClick}
+              className="cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              {svg.docs()}
+            </div>
           </div>
 
           {/* Use memoized sections instead of regular JSX */}
