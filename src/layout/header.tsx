@@ -368,7 +368,8 @@ export default function Header() {
   }, [currentStep]);
 
   const handleDocsClick = useCallback(() => {
-    window.open("/PET FUND.pdf", "_blank");
+    window.open("/READING_IELTS_TEST_1.pdf", "_blank");
+    // window.open("/PET FUND.pdf", "_blank");
   }, []);
 
   const connectWallet = useCallback(async () => {
