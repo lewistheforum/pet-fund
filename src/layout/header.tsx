@@ -943,6 +943,18 @@ export default function Header() {
     },
   };
 
+  const iconSectionVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      y: -10,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
   const heroItemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -1029,6 +1041,27 @@ export default function Header() {
     hover: {
       scale: 1.02,
       x: 5,
+      transition: {
+        type: "spring" as const,
+        stiffness: 400,
+        damping: 10,
+      },
+    },
+  };
+
+  const featureIconVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring" as const,
+        stiffness: 300,
+        damping: 15,
+      },
+    },
+    hover: {
+      y: -5,
       transition: {
         type: "spring" as const,
         stiffness: 400,
@@ -2053,16 +2086,35 @@ export default function Header() {
             className="object-cover lg:object-right"
           />
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black via-black/50 to-black/20 z-0" />
-          <div className="z-[1000] hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg">
-            <div>{svg.x()}</div>
-            <div>{svg.tele()}</div>
-            <div
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={iconSectionVariants}
+            className="z-[60] hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg"
+          >
+            <motion.div
+              variants={featureIconVariants}
+              whileHover="hover"
+              className="cursor-pointer z-[60]"
+            >
+              {svg.x()}
+            </motion.div>
+            <motion.div
+              variants={featureIconVariants}
+              whileHover="hover"
+              className="cursor-pointer z-[60]"
+            >
+              {svg.tele()}
+            </motion.div>
+            <motion.div
+              variants={featureIconVariants}
+              whileHover="hover"
               onClick={handleDocsClick}
               className="cursor-pointer hover:opacity-80 transition-opacity"
             >
               {svg.docs()}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Use memoized sections instead of regular JSX */}
           {(selectedOption === 0 ||
