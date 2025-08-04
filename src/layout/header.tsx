@@ -368,7 +368,7 @@ export default function Header() {
   }, [currentStep]);
 
   const handleDocsClick = useCallback(() => {
-    window.open('/PET FUND.pdf', '_blank');
+    window.open("/PET FUND.pdf", "_blank");
   }, []);
 
   const connectWallet = useCallback(async () => {
@@ -2053,10 +2053,10 @@ export default function Header() {
             className="object-cover lg:object-right"
           />
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black via-black/50 to-black/20 z-0" />
-          <div className="hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg">
+          <div className="z-[1000] hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg">
             <div>{svg.x()}</div>
             <div>{svg.tele()}</div>
-            <div 
+            <div
               onClick={handleDocsClick}
               className="cursor-pointer hover:opacity-80 transition-opacity"
             >
