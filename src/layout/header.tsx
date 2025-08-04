@@ -367,6 +367,10 @@ export default function Header() {
     }
   }, [currentStep]);
 
+  const handleDocsClick = useCallback(() => {
+    window.open('/PET FUND.pdf', '_blank');
+  }, []);
+
   const connectWallet = useCallback(async () => {
     try {
       if (selectedNetwork === "SOLANA") {
@@ -654,6 +658,7 @@ export default function Header() {
     solanaSendTransaction,
     chain,
     switchChain,
+    isSolanaConnected,
   ]);
 
   const getAvailableTokens = useCallback(() => {
@@ -2051,7 +2056,12 @@ export default function Header() {
           <div className="hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg">
             <div>{svg.x()}</div>
             <div>{svg.tele()}</div>
-            <div>{svg.docs()}</div>
+            <div 
+              onClick={handleDocsClick}
+              className="cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              {svg.docs()}
+            </div>
           </div>
 
           {/* Use memoized sections instead of regular JSX */}
