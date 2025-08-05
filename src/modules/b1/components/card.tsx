@@ -1,5 +1,6 @@
 import React from "react";
 import { Edit } from "lucide-react";
+import Image, { StaticImageData } from "next/image";
 
 interface CampaignCardProps {
   daysLeft: number;
@@ -9,6 +10,7 @@ interface CampaignCardProps {
   goal: number;
   onViewMore?: () => void;
   onEdit?: () => void;
+  image: StaticImageData;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = ({
@@ -19,6 +21,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   goal,
   onViewMore,
   onEdit,
+  image,
 }) => {
   const progressPercentage = Math.min((raised / goal) * 100, 100);
 
@@ -34,16 +37,19 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-4">
       {/* Header with image placeholder and controls */}
-      <div className="relative bg-gray-300 h-40 flex items-start justify-between py-4 pr-4 rounded-lg">
+      <div
+        className="relative bg-gray-300 h-40 flex items-start justify-between py-4 pr-4 rounded-lg"
+      >
+        <Image src={image} alt="Pet Fund Logo" fill priority className="z-0 rounded-lg object-cover" />
         {/* Days left badge */}
-        <div className="bg-[#4AA76C] text-white px-3 py-1 rounded-r-full rounded-bl-full text-sm font-font-2-bold">
+        <div className="bg-[#4AA76C] text-white px-3 py-1 rounded-r-full rounded-bl-full text-sm font-font-2-bold z-20">
           {daysLeft} Days Left
         </div>
 
         {/* Edit button */}
         <button
           onClick={onEdit}
-          className="bg-white rounded-full p-2 shadow-sm hover:shadow-md transition-shadow"
+          className="bg-white rounded-full p-2 shadow-sm hover:shadow-md transition-shadow z-20"
         >
           <Edit className="w-4 h-4 text-gray-600" />
         </button>

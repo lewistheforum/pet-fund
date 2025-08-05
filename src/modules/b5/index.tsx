@@ -40,7 +40,7 @@ export default function B5() {
                       30% (300M TOKENS)
                     </div>
                     <div className="text-xl font-font-2 text-white">
-                      Total Supply
+                      Presale
                     </div>
                   </div>
                 </div>
@@ -49,7 +49,7 @@ export default function B5() {
                 <div className="flex flex-row items-start gap-5">
                   <div className="h-20 w-2 bg-[#4AA76C]"></div>
                   <div className="flex flex-col gap-2">
-                    <div className="text-3xl font-font-2-extra-bold text-[#4AA76C]">
+                    <div className="text-3xl font-font-2-extra-bold text-[#4AA76C] uppercase">
                       $0.001 - $0.002, 10 stage
                     </div>
                     <div className="text-xl font-font-2 text-white">
@@ -66,7 +66,8 @@ export default function B5() {
                       ZERO TAX
                     </div>
                     <div className="text-xl font-font-2 text-white">
-                      No transaction fees to ensure trust and accessibility
+                      No transaction fees to ensure trust
+                      and accessibility
                     </div>
                   </div>
                 </div>

@@ -164,8 +164,8 @@ export default function B2() {
                 Revenue Sharing Economics
               </div>
               <div className="flex items-start gap-2">
-                <div>
-                  <div className="w-3 h-3 bg-[#4AA76C] rounded-full mt-1"></div>
+                <div className="flex items-center justify-center">
+                  <div className="w-3 h-3 bg-[#4AA76C] rounded-full mt-1.5"></div>
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="font-font-2-bold lg:text-sm !text-base">
@@ -188,11 +188,10 @@ export default function B2() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="font-font-2-bold lg:text-sm !text-base">
-                    Stablecoin Share back to users, backed by Meow Fund revenue
+                    Stablecoin Share back to users, backed by Pet Fund revenue
                   </div>
                   <div className="text-sm lg:text-xs font-font-2">
-                    • 75% Web2 revenue from cat data sale to enterprise → user
-                    rewards
+                    • 75% Web2 revenue from pet data sale to enterprise → user rewards
                   </div>
                   <div className="text-sm lg:text-xs font-font-2">
                     • Stable value rewards - no crypto volatility risk
@@ -211,8 +210,7 @@ export default function B2() {
                     Why This Model Works?
                   </div>
                   <div className="text-sm lg:text-xs font-font-2">
-                    • Your Insights/ Data about Cat Behavior = valuable market
-                    insights
+                    • Your Insights/ Data about Pet Behavior = valuable market insights
                   </div>
                   <div className="text-sm lg:text-xs font-font-2">
                     • Data monetization creates sustainable rewards
@@ -224,8 +222,7 @@ export default function B2() {
                     • Community-driven growth benefits everyone
                   </div>
                   <div className="text-sm lg:text-xs font-font-2">
-                    • Part of Revenue goes to Cat Save Organization to save more
-                    cats
+                    • Part of Revenue goes to Pet Save Organization to save more pets
                   </div>
                 </div>
               </div>
@@ -238,7 +235,7 @@ export default function B2() {
                     How to Participate?
                   </div>
                   <div className="text-sm lg:text-xs font-font-2">
-                    • Hold $PETF token
+                    • Hold <strong>$PETF</strong> token
                   </div>
                   <div className="text-sm lg:text-xs font-font-2">
                     • Verified data = real rewards

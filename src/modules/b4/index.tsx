@@ -11,13 +11,13 @@ export default function B4() {
       svg: svg.b4_hiw_1(),
       title: "User Participation",
       description:
-        "Cat lovers join the SocialFi platform, sharing anonymized data (e.g., preferences, adoption trends) via a secure dApp.",
+        "Pet lovers join the SocialFi platform, sharing anonymized data (e.g., preferences, adoption trends) via a secure dApp..",
     },
     {
       svg: svg.b4_hiw_2(),
       title: "Data Monetization",
       description:
-        "This data is sold to cat food brands like Purina, generating revenue through InfoFi pipelines inherited from our Web2 expertise.",
+        "This data is sold to pet food brands like Purina, generating revenue through InfoFi pipelines inherited from our Web2 expertise.",
     },
     {
       svg: svg.b4_hiw_3(),
@@ -29,7 +29,7 @@ export default function B4() {
       svg: svg.b4_hiw_4(),
       title: "Rescue Funding",
       description:
-        "Donations are tracked on Polygon blockchain, ensuring transparency to shelters in regions like Ukraine and Syria.",
+        "Donations are tracked on Ethereum blockchain, ensuring transparency to shelters in regions like Ukraine and Syria.",
     },
     {
       svg: svg.b4_hiw_5(),
@@ -53,7 +53,7 @@ export default function B4() {
     {
       svg: svg.b4_uot_3(),
       title: "Governance",
-      description: "Influences platform features and rescue priorities.",
+      description: "Influencer platform features and rescue priorities.",
     },
     {
       svg: svg.b4_uot_4(),
@@ -114,7 +114,7 @@ export default function B4() {
           <div>
             <AnimatedSection variant="fadeUp">
               <div className="flex flex-row justify-center items-center gap-5 pb-10">
-                <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl">
+                <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl uppercase">
                   Utility of Token
                 </div>
               </div>
@@ -128,7 +128,7 @@ export default function B4() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 pb-10">
             {uot.map((item, index) => (
               <AnimatedSection key={index} variant="scale" delay={0.15 * index}>
-                <div className="flex flex-col items-center gap-5 bg-[#D9D9D9] w-full py-7 px-3 rounded-2xl">
+                <div className="flex flex-col items-center gap-5 bg-[#D9D9D9] w-full py-7 px-3 rounded-2xl h-72">
                   <div className="flex flex-col items-center gap-10">
                     <div className="h-32 flex items-center justify-center">
                       {item.svg}

@@ -332,6 +332,21 @@ export default function Header() {
     return num.toLocaleString();
   };
 
+  // Helper function to process answer text and wrap $PETF in strong tags
+  const processAnswerText = (text: string): React.ReactNode => {
+    if (!text.includes('$PETF')) {
+      return text;
+    }
+
+    const parts = text.split(/(\$PETF)/g);
+    return parts.map((part, index) => {
+      if (part === '$PETF') {
+        return <strong key={index}>{part}</strong>;
+      }
+      return part;
+    });
+  };
+
   // Helper functions for the new buy flow
   const handleNetworkSelect = useCallback((networkCode: string) => {
     setSelectedNetwork(networkCode);
@@ -368,8 +383,7 @@ export default function Header() {
   }, [currentStep]);
 
   const handleDocsClick = useCallback(() => {
-    window.open("/READING_IELTS_TEST_1.pdf", "_blank");
-    // window.open("/PET FUND.pdf", "_blank");
+    window.open("/PET-FUND.pdf", "_blank");
   }, []);
 
   const connectWallet = useCallback(async () => {
@@ -550,8 +564,7 @@ export default function Header() {
             console.error("Failed to switch chain:", error);
             console.error("Chain switch error details:", error);
             alert(
-              `Please manually switch to ${
-                selectedNetwork === "ETHEREUM" ? "Ethereum" : "BSC"
+              `Please manually switch to ${selectedNetwork === "ETHEREUM" ? "Ethereum" : "BSC"
               } network in your wallet and try again`
             );
             return;
@@ -1219,8 +1232,8 @@ export default function Header() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <h1 className="text-4xl font-bold text-[#4AA76C] tracking-wide">
-                BUY $PETF
+              <h1 className="text-4xl font-bold text-[#4AA76C] tracking-wide uppercase">
+                Donate to get $PETF
               </h1>
             </motion.div>
 
@@ -1350,20 +1363,18 @@ export default function Header() {
                       className="flex flex-col items-center justify-center text-center"
                     >
                       <div
-                        className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold mb-2 ${
-                          item.step <= currentStep
-                            ? "bg-[#4AA76C] text-white border-[#4AA76C]"
-                            : "bg-white text-gray-400 border-gray-300"
-                        }`}
+                        className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold mb-2 ${item.step <= currentStep
+                          ? "bg-[#4AA76C] text-white border-[#4AA76C]"
+                          : "bg-white text-gray-400 border-gray-300"
+                          }`}
                       >
                         {item.step <= currentStep ? "✓" : item.step}
                       </div>
                       <span
-                        className={`text-sm font-medium whitespace-nowrap ${
-                          item.step <= currentStep
-                            ? "text-[#4AA76C]"
-                            : "text-gray-400"
-                        }`}
+                        className={`text-sm font-medium whitespace-nowrap ${item.step <= currentStep
+                          ? "text-[#4AA76C]"
+                          : "text-gray-400"
+                          }`}
                       >
                         {item.label}
                       </span>
@@ -1384,17 +1395,15 @@ export default function Header() {
                       <button
                         key={network.code}
                         onClick={() => handleNetworkSelect(network.code)}
-                        className={`p-2 border-2 rounded-lg transition-all ${
-                          selectedNetwork === network.code
-                            ? "border-[#4AA76C] bg-[#4AA76C] text-white"
-                            : "border-gray-200 bg-white text-black hover:border-gray-300"
-                        }`}
+                        className={`p-2 border-2 rounded-lg transition-all ${selectedNetwork === network.code
+                          ? "border-[#4AA76C] bg-[#4AA76C] text-white"
+                          : "border-gray-200 bg-white text-black hover:border-gray-300"
+                          }`}
                       >
                         <div className="flex flex-col items-center space-y-2">
                           <div
-                            className={`w-8 h-8 rounded flex items-center justify-center object-contain ${
-                              selectedNetwork === network.code ? "" : ""
-                            }`}
+                            className={`w-8 h-8 rounded flex items-center justify-center object-contain ${selectedNetwork === network.code ? "" : ""
+                              }`}
                           >
                             {network.icon}
                           </div>
@@ -1426,17 +1435,15 @@ export default function Header() {
                       <button
                         key={token.code}
                         onClick={() => handleTokenSelect(token.code)}
-                        className={`flex-1 p-1.5 border-2 rounded-lg transition-all ${
-                          selectedToken === token.code
-                            ? "border-[#4AA76C] bg-[#4AA76C] text-white"
-                            : "border-gray-200 bg-white text-black hover:border-gray-300"
-                        }`}
+                        className={`flex-1 p-1.5 border-2 rounded-lg transition-all ${selectedToken === token.code
+                          ? "border-[#4AA76C] bg-[#4AA76C] text-white"
+                          : "border-gray-200 bg-white text-black hover:border-gray-300"
+                          }`}
                       >
                         <div className="flex flex-col items-center space-y-1">
                           <div
-                            className={`w-8 h-8 rounded flex items-center justify-center ${
-                              selectedToken === token.code ? "" : ""
-                            }`}
+                            className={`w-8 h-8 rounded flex items-center justify-center ${selectedToken === token.code ? "" : ""
+                              }`}
                           >
                             {token.icon}
                           </div>
@@ -1516,12 +1523,11 @@ export default function Header() {
                         !purchaseAmountNew ||
                         isNaN(parseFloat(purchaseAmountNew))
                       }
-                      className={`flex-2 py-1.5 px-4 rounded-lg font-semibold ${
-                        purchaseAmountNew &&
+                      className={`flex-2 py-1.5 px-4 rounded-lg font-semibold ${purchaseAmountNew &&
                         !isNaN(parseFloat(purchaseAmountNew))
-                          ? "bg-[#4AA76C] text-white hover:bg-[#3d8c5a]"
-                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      }`}
+                        ? "bg-[#4AA76C] text-white hover:bg-[#3d8c5a]"
+                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        }`}
                     >
                       Continue →
                     </button>
@@ -1939,9 +1945,9 @@ export default function Header() {
           initial="hidden"
           animate="visible"
           variants={headerVariants}
-          // style={{
-          //   boxShadow: headerShadow,
-          // }}
+        // style={{
+        //   boxShadow: headerShadow,
+        // }}
         >
           <motion.div className="flex flex-row items-center justify-between px-3 sm:px-5 lg:px-20 py-3 bg-white">
             {/* Logo */}
@@ -1969,9 +1975,8 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(0)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -1980,9 +1985,8 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(1)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -1991,9 +1995,8 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => scrollToSection("section-tokenomics")}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2002,9 +2005,8 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(3)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2013,9 +2015,8 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(4)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2024,9 +2025,8 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(5)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2086,12 +2086,12 @@ export default function Header() {
             priority
             className="object-cover lg:object-right"
           />
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black via-black/50 to-black/20 z-0" />
+          <div className="z-0 absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black via-black/50 to-black/20" />
           <motion.div
             initial="hidden"
             animate="visible"
             variants={iconSectionVariants}
-            className="z-[60] hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg"
+            className="z-[30] hidden lg:flex absolute right-[2%] top-[3%] flex-col items-center justify-center gap-4 bg-white px-3 py-3 rounded-lg"
           >
             <motion.div
               variants={featureIconVariants}
@@ -2184,7 +2184,7 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  [how to buy $petf crypto presale]
+                  [how to get $petf crypto presale]
                 </motion.div>
                 <motion.div
                   className="grid grid-cols-1 lg:grid-cols-3 gap-4"
@@ -2312,10 +2312,21 @@ export default function Header() {
                         <div className="text-2xl font-font-2-extra-bold mb-5">
                           {item.title}
                         </div>
-                        <div className="text-[18px]">{item.answer}</div>
+                        <div className="text-[18px]">{processAnswerText(item.answer)}</div>
                       </motion.div>
                     </div>
                   ))}
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-col gap-2 items-center justify-center mt-5 text-white">
+                  <div className="uppercase font-font-2 text-2xl">Disclaimer</div>
+                  <div className="text-center uppercase font-font-2-bold">Always do your own research about the best crypto to buy, best ICO, or new cryptocurrency. Nothing here is financial advice.
+                  </div>
+                  <div className="text-center uppercase font-font-2-bold">© 2025 PET Fund. All rights reserved.</div>
                 </motion.div>
               </motion.div>
             </div>
@@ -2324,7 +2335,7 @@ export default function Header() {
           {selectedOption === 5 && (
             <div className="col-span-12 lx-auto relative px-5 lg:px-20 lg:pr-28 pt-10 text-white pb-20">
               <motion.div
-                className="font-font-2-black text-6xl mb-7"
+                className="font-font-2-black text-6xl mb-7 uppercase"
                 initial="initial"
                 animate="animate"
                 exit="exit"
@@ -2341,7 +2352,7 @@ export default function Header() {
               >
                 Whether during or after the <strong>$PETF</strong> presale, your
                 staking rewards will be based on your purchased allocation.
-                Backed by real revenue, these rewards will be fully claimable
+                <br />Backed by real revenue, these rewards will be fully claimable
                 once the claiming phase goes live.
               </motion.div>
               <motion.div
@@ -2450,7 +2461,7 @@ export default function Header() {
                       transition: { delay: 1.1, duration: 0.5 },
                     }}
                   >
-                    REVENUE
+                    TOTAL SUPPLY
                   </motion.h2>
 
                   {/* Chart Area */}
@@ -2542,19 +2553,17 @@ export default function Header() {
                               className="flex-1 flex justify-center"
                             >
                               <motion.div
-                                className={`w-full sm:max-w-[25%] max-w-[45%] rounded-t-full transition-all duration-300 ${
-                                  item.highlighted
-                                    ? "bg-[#4AA76C] hover:bg-[#3a8959]"
-                                    : "bg-gray-400 hover:bg-gray-500"
-                                } relative group`}
+                                className={`w-full sm:max-w-[25%] max-w-[45%] rounded-t-full transition-all duration-300 ${item.highlighted
+                                  ? "bg-[#4AA76C] hover:bg-[#3a8959]"
+                                  : "bg-gray-400 hover:bg-gray-500"
+                                  } relative group`}
                                 style={{
                                   height: `${height}px`,
                                   minHeight: "10px",
                                   originY: "bottom",
                                 }}
-                                title={`${
-                                  item.date
-                                }: ${item.value.toLocaleString()}`}
+                                title={`${item.date
+                                  }: ${item.value.toLocaleString()}`}
                                 variants={chartBarVariants}
                                 custom={index}
                                 whileHover={{ scale: 1.03 }}
@@ -2615,7 +2624,7 @@ export default function Header() {
                 </div>
 
                 {/* Legend/Info */}
-                <motion.div
+                {/* <motion.div
                   className="mt-4 text-center text-xs sm:text-sm text-gray-600"
                   initial={{ opacity: 0 }}
                   animate={{
@@ -2633,7 +2642,7 @@ export default function Header() {
                       <span>Current Month</span>
                     </div>
                   </div>
-                </motion.div>
+                </motion.div> */}
               </motion.div>
             </div>
           )}
@@ -2690,9 +2699,8 @@ export default function Header() {
                     handleNavClick(0);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2704,9 +2712,8 @@ export default function Header() {
                     handleNavClick(1);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2718,9 +2725,8 @@ export default function Header() {
                     scrollToSection("section-tokenomics");
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2732,9 +2738,8 @@ export default function Header() {
                     handleNavClick(3);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2746,9 +2751,8 @@ export default function Header() {
                     handleNavClick(4);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2760,9 +2764,8 @@ export default function Header() {
                     handleNavClick(5);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
-                    selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
-                  } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
+                    } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

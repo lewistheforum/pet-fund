@@ -18,12 +18,7 @@ export default function B3() {
                 </div>
               </div>
               <div className="text-base font-font-2 text-justify">
-                Our vision is to create a trusted global community of cat lovers
-                on a SocialFi platform, where their contributions drive
-                life-saving rescues. By leveraging our data analytics heritage,
-                AI, and InfoFi, we aim to redefine how data value is shared,
-                ensuring profits fund verified shelters while rewarding
-                participants with tokens, NFTs, and a sense of purpose.
+                Our vision is to create a trusted global community of pet lovers on a SocialFi platform, where their contributions drive life-saving rescues. By leveraging our data analytics heritage, AI, and InfoFi, we aim to redefine how data value is shared, ensuring profits fund verified shelters while rewarding participants with tokens, NFTs, and a sense of purpose.
               </div>
             </div>
           </AnimatedSection>
@@ -39,17 +34,13 @@ export default function B3() {
                 <AnimatedSection variant="fadeLeft" delay={0.3}>
                   <div className="flex flex-row items-start gap-2">
                     <div>
-                      <div className="w-1 h-1 bg-white rounded-full mt-2"></div>
+                      <div className="w-1 h-1 bg-white rounded-full mt-3"></div>
                     </div>
                     <div className="text-justify">
                       <span className="font-font-2-extra-bold text-lg">
                         PROBLEM:
                       </span>{" "}
-                      Traditional data industries, including our past Web2
-                      ventures, excluded users from the value they generated,
-                      while cat rescues in war zones lack sustainable funding.
-                      Users&apos; data fueled corporate profits, and rescue
-                      efforts often lacked transparency.
+                      Traditional data industries, including our past Web2 ventures, excluded users from the value they generated, while pet rescues in war zones lack sustainable funding. Users&apos; data fueled corporate profits, and rescue efforts often lacked transparency.
                     </div>
                   </div>
                 </AnimatedSection>
@@ -57,17 +48,13 @@ export default function B3() {
                 <AnimatedSection variant="fadeRight" delay={0.4}>
                   <div className="flex flex-row items-start gap-2">
                     <div>
-                      <div className="w-1 h-1 bg-white rounded-full mt-2"></div>
+                      <div className="w-1 h-1 bg-white rounded-full mt-3"></div>
                     </div>
                     <div className="text-justify">
                       <span className="font-font-2-extra-bold text-lg">
                         SOLUTION:
                       </span>{" "}
-                      Pet Fund corrects this by rewarding cat lovers with $PETF
-                      tokens for sharing anonymized data, sold ethically to cat
-                      food corporations. Blockchain ensures transparent donation
-                      tracking, and AI optimizes rescue efforts, creating a
-                      self-sustaining cycle of goodwill and support.
+                      Pet Fund corrects this by rewarding pet lovers with $PETF tokens for sharing anonymized data, sold ethically to pet food corporations. Blockchain ensures transparent donation tracking, and AI optimizes rescue efforts, creating a self-sustaining cycle of goodwill and support.
                     </div>
                   </div>
                 </AnimatedSection>
@@ -111,14 +98,7 @@ export default function B3() {
                 </div>
               </div>
               <div className="text-base font-font-2 text-justify">
-                Pet Fund stands out due to its unique blend of credibility and
-                innovation. Our decade-long track record in Web2 data analytics,
-                serving Fortune 500 clients, establishes trust. Unlike
-                speculative crypto projects, we offer a tangible mission—saving
-                cats—backed by audited smart contracts (CoinSult, SOLIDProof)
-                and GDPR-compliant data practices. Our experience ensures
-                scalable, reliable execution, making Pet Fund a dependable
-                choice for investors and pet lovers alike.
+                Pet Fund stands out due to its unique blend of credibility and innovation. Our decade-long track record in Web2 data analytics, serving Fortune 500 clients, establishes trust. Unlike speculative crypto projects, we offer a tangible mission—saving pets—backed by audited smart contracts (CoinSult, SOLIDProof) and GDPR-compliant data practices. Our experience ensures scalable, reliable execution, making Pet Fund a dependable choice for investors and pet lovers alike.
               </div>
             </div>
           </AnimatedSection>
@@ -131,13 +111,7 @@ export default function B3() {
                 </div>
               </div>
               <div className="text-base font-font-2 text-justify">
-                At Pet Fund, our heart lies in cat, dog welfare. Born from a
-                recognition of past ethical shortcomings, we commit to
-                redistributing data profits to token holders and rescue
-                operations. Every $PETF spent supports verified shelters in war
-                zones, with blockchain providing real-time proof of impact.
-                Partnerships with nonprofit organizations reinforce our
-                dedication to making a difference, not just a profit.
+                At Pet Fund, our heart lies in pet welfare. Born from a recognition of past ethical shortcomings, we commit to redistributing data profits to token holders and rescue operations. Every $PETF spent supports verified shelters in war zones, with blockchain providing real-time proof of impact. Partnerships with nonprofit organizations reinforce our dedication to making a difference, not just a profit.
               </div>
             </div>
           </AnimatedSection>

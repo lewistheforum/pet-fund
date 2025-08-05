@@ -43,17 +43,17 @@ export default function B8() {
           <div>
             <AnimatedSection variant="fadeUp">
               <div className="flex flex-row justify-center items-center gap-5 pb-10">
-                <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl">
-                  Utility of Token
+                <div className="text-3xl font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl uppercase">
+                  Proof of PET
                 </div>
               </div>
             </AnimatedSection>
           </div>
-          <AnimatedSection variant="fadeUp" delay={0.2}>
+          {/* <AnimatedSection variant="fadeUp" delay={0.2}>
             <div className="font-font-2-extra-bold text-2xl text-center pb-10">
               The $MEOWF token is the lifeblood of the Meow Fund ecosystem:
             </div>
-          </AnimatedSection>
+          </AnimatedSection> */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 pb-10">
             {uot.map((item, index) => (
               <AnimatedSection

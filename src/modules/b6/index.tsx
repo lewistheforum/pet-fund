@@ -16,7 +16,7 @@ export default function B6() {
       id: 1,
       imageUrl: "/body/b6-i1.png",
       title: "Presale Launch",
-      desc: "Begins 09:15 PM +07, July 26, 2025, on meowfund.io with MetaMask integration.",
+      desc: "Begins 09:15 PM +07, July 26, 2025, on petfund.io with MetaMask integration.",
     },
     {
       id: 2,
@@ -151,9 +151,8 @@ export default function B6() {
                         alt={item.desc}
                         width={1000}
                         height={1000}
-                        className={`${
-                          item.id === 1 ? "object-contain" : "object-cover"
-                        } w-[500px] h-60 flex justify-center items-center rounded-r-2xl`}
+                        className={`${item.id === 1 ? "object-contain" : "object-cover"
+                          } w-[500px] h-60 flex justify-center items-center rounded-r-2xl`}
                       />
                     </div>
                   </div>

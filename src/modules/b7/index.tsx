@@ -21,7 +21,7 @@ const B7: React.FC = () => {
     },
     {
       quarter: "Q2.2026",
-      title: "LISTINGS ON UNISWAP AND TIER-2 CEXS,",
+      title: "LISTINGS ON UNISWAP AND TIER-1 CEXS,",
       description: "RESCUE EXPANSION TO NEW REGIONS.",
     },
     {
@@ -35,7 +35,7 @@ const B7: React.FC = () => {
     <div className="px-5 lg:px-20">
       <AnimatedSection variant="fadeUp">
         <div className="flex flex-row justify-center items-center gap-5 pb-10 w-full">
-          <div className="text-3xl text-white font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl w-full">
+          <div className="text-3xl text-white font-font-2-extra-bold bg-[#4AA76C] px-5 py-1.5 rounded-xl w-full text-center">
             ROADMAP
           </div>
         </div>
@@ -57,17 +57,15 @@ const B7: React.FC = () => {
                     delay={0.2 * index + 0.3}
                   >
                     <div
-                      className={`flex items-center ${
-                        index % 2 !== 0 ? "flex-row-reverse" : "flex-row"
-                      }`}
+                      className={`flex items-center ${index % 2 !== 0 ? "flex-row-reverse" : "flex-row"
+                        }`}
                     >
                       {/* Content */}
                       <div
-                        className={`w-[31%] lg:w-2/3 ${
-                          index % 2 !== 0
-                            ? "lg:pr-12 text-left ml-10"
-                            : "lg:pl-12 text-right mr-10"
-                        }`}
+                        className={`w-[31%] lg:w-2/3 ${index % 2 !== 0
+                          ? "lg:pr-12 text-left ml-10"
+                          : "lg:pl-12 text-right mr-10"
+                          }`}
                       >
                         <div className="rounded-lg py-6">
                           <h3 className="text-2xl text-white font-font-2-extra-bold mb-2">

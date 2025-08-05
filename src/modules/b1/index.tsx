@@ -7,36 +7,44 @@ import { DATA } from "@/utils/data";
 import svg from "@/utils/svg";
 import CampaignCard from "./components/card";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
+import i1 from "../../../public/body/b1_card_i1.jpg";
+import i2 from "../../../public/body/b1_card_i2.jpg";
+import i3 from "../../../public/body/b1_card_i3.jpg";
+import i4 from "../../../public/body/b1_card_i4.jpg";
 
 export default function B1() {
   const cardData = [
     {
       daysLeft: 32,
       category: "Healthcare",
-      title: "Medical Aid for Cat Rescue Teams",
+      title: "Medical Aid for Pet Rescue Teams",
       raised: 52000,
       goal: 100000,
+      image: i1,
     },
     {
       daysLeft: 32,
       category: "Healthcare",
-      title: "Medical Aid for Cat Rescue Teams",
+      title: "Medical Aid for Pet Rescue Teams",
       raised: 52000,
       goal: 100000,
+      image: i2,
     },
     {
       daysLeft: 32,
       category: "Healthcare",
-      title: "Medical Aid for Cat Rescue Teams",
+      title: "Medical Aid for Pet Rescue Teams",
       raised: 52000,
       goal: 100000,
+      image: i3,
     },
     {
       daysLeft: 32,
       category: "Healthcare",
-      title: "Medical Aid for Cat Rescue Teams",
+      title: "Medical Aid for Pet Rescue Teams",
       raised: 52000,
       goal: 100000,
+      image: i4,
     },
   ];
   return (
@@ -56,14 +64,7 @@ export default function B1() {
             <span className="font-font-2-extra-bold">Pet Fund</span> is a
             groundbreaking{" "}
             <span className="font-font-2-extra-bold">Web3 SocialFi</span>{" "}
-            platform emerging from a decade-long legacy as a Web2 data analytics
-            company. Having generated millions in revenue by selling anonymized
-            consumer insights to Fortune 500 brands, we bring proven expertise
-            to the crypto space. Launched on July 26, 2025, Pet Fund pivots this
-            success to empower pet lovers, rewarding them for their data while
-            funding cat rescues in war-torn regions like Ukraine and Syria. With
-            a $500,000 presale of the $PETF token, we combine trust,
-            transparency, and community to make a lasting impact.
+            platform emerging from a decade-long legacy as a Web2 data analytics company. Having generated millions in revenue by selling anonymized consumer insights to Fortune 500 brands, we bring proven expertise to the crypto space. Launched on July 26, 2025, Pet Fund pivots this success to empower pet lovers, rewarding them for their data while funding pet rescues in war-torn regions like Ukraine and Syria. With a $500,000 presale of the $PETF token, we combine trust, transparency, and community to make a lasting impact.
           </div>
         </AnimatedSection>
         <AnimatedSection variant="fadeUp" delay={0.3}>
@@ -104,6 +105,7 @@ export default function B1() {
                 goal={item.goal}
                 onViewMore={() => console.log("View more clicked")}
                 onEdit={() => console.log("Edit clicked")}
+                image={item.image}
               />
             </AnimatedSection>
           ))}
