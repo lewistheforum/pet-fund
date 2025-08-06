@@ -334,13 +334,13 @@ export default function Header() {
 
   // Helper function to process answer text and wrap $PETF in strong tags
   const processAnswerText = (text: string): React.ReactNode => {
-    if (!text.includes('$PETF')) {
+    if (!text.includes("$PETF")) {
       return text;
     }
 
     const parts = text.split(/(\$PETF)/g);
     return parts.map((part, index) => {
-      if (part === '$PETF') {
+      if (part === "$PETF") {
         return <strong key={index}>{part}</strong>;
       }
       return part;
@@ -564,7 +564,8 @@ export default function Header() {
             console.error("Failed to switch chain:", error);
             console.error("Chain switch error details:", error);
             alert(
-              `Please manually switch to ${selectedNetwork === "ETHEREUM" ? "Ethereum" : "BSC"
+              `Please manually switch to ${
+                selectedNetwork === "ETHEREUM" ? "Ethereum" : "BSC"
               } network in your wallet and try again`
             );
             return;
@@ -1363,18 +1364,20 @@ export default function Header() {
                       className="flex flex-col items-center justify-center text-center"
                     >
                       <div
-                        className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold mb-2 ${item.step <= currentStep
-                          ? "bg-[#4AA76C] text-white border-[#4AA76C]"
-                          : "bg-white text-gray-400 border-gray-300"
-                          }`}
+                        className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold mb-2 ${
+                          item.step <= currentStep
+                            ? "bg-[#4AA76C] text-white border-[#4AA76C]"
+                            : "bg-white text-gray-400 border-gray-300"
+                        }`}
                       >
                         {item.step <= currentStep ? "✓" : item.step}
                       </div>
                       <span
-                        className={`text-sm font-medium whitespace-nowrap ${item.step <= currentStep
-                          ? "text-[#4AA76C]"
-                          : "text-gray-400"
-                          }`}
+                        className={`text-sm font-medium whitespace-nowrap ${
+                          item.step <= currentStep
+                            ? "text-[#4AA76C]"
+                            : "text-gray-400"
+                        }`}
                       >
                         {item.label}
                       </span>
@@ -1395,15 +1398,17 @@ export default function Header() {
                       <button
                         key={network.code}
                         onClick={() => handleNetworkSelect(network.code)}
-                        className={`p-2 border-2 rounded-lg transition-all ${selectedNetwork === network.code
-                          ? "border-[#4AA76C] bg-[#4AA76C] text-white"
-                          : "border-gray-200 bg-white text-black hover:border-gray-300"
-                          }`}
+                        className={`p-2 border-2 rounded-lg transition-all ${
+                          selectedNetwork === network.code
+                            ? "border-[#4AA76C] bg-[#4AA76C] text-white"
+                            : "border-gray-200 bg-white text-black hover:border-gray-300"
+                        }`}
                       >
                         <div className="flex flex-col items-center space-y-2">
                           <div
-                            className={`w-8 h-8 rounded flex items-center justify-center object-contain ${selectedNetwork === network.code ? "" : ""
-                              }`}
+                            className={`w-8 h-8 rounded flex items-center justify-center object-contain ${
+                              selectedNetwork === network.code ? "" : ""
+                            }`}
                           >
                             {network.icon}
                           </div>
@@ -1435,15 +1440,17 @@ export default function Header() {
                       <button
                         key={token.code}
                         onClick={() => handleTokenSelect(token.code)}
-                        className={`flex-1 p-1.5 border-2 rounded-lg transition-all ${selectedToken === token.code
-                          ? "border-[#4AA76C] bg-[#4AA76C] text-white"
-                          : "border-gray-200 bg-white text-black hover:border-gray-300"
-                          }`}
+                        className={`flex-1 p-1.5 border-2 rounded-lg transition-all ${
+                          selectedToken === token.code
+                            ? "border-[#4AA76C] bg-[#4AA76C] text-white"
+                            : "border-gray-200 bg-white text-black hover:border-gray-300"
+                        }`}
                       >
                         <div className="flex flex-col items-center space-y-1">
                           <div
-                            className={`w-8 h-8 rounded flex items-center justify-center ${selectedToken === token.code ? "" : ""
-                              }`}
+                            className={`w-8 h-8 rounded flex items-center justify-center ${
+                              selectedToken === token.code ? "" : ""
+                            }`}
                           >
                             {token.icon}
                           </div>
@@ -1523,11 +1530,12 @@ export default function Header() {
                         !purchaseAmountNew ||
                         isNaN(parseFloat(purchaseAmountNew))
                       }
-                      className={`flex-2 py-1.5 px-4 rounded-lg font-semibold ${purchaseAmountNew &&
+                      className={`flex-2 py-1.5 px-4 rounded-lg font-semibold ${
+                        purchaseAmountNew &&
                         !isNaN(parseFloat(purchaseAmountNew))
-                        ? "bg-[#4AA76C] text-white hover:bg-[#3d8c5a]"
-                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                        }`}
+                          ? "bg-[#4AA76C] text-white hover:bg-[#3d8c5a]"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      }`}
                     >
                       Continue →
                     </button>
@@ -1846,7 +1854,7 @@ export default function Header() {
               transition={{ type: "spring", stiffness: 400 }}
             >
               <span className="w-7 h-full bg-[#00FF37] rounded-md mr-2 text-xl"></span>
-              MEOW FUND SOCIAL IS LIVE
+              PET FUND SOCIAL IS LIVE
             </motion.div>
           </motion.div>
           <motion.div
@@ -1884,8 +1892,8 @@ export default function Header() {
               variants={heroItemVariants}
             >
               <span className="text-green-400">$PETF</span> goes beyond the best
-              crypto presale in 2025. Meow Fund unites cat lovers on a SocialFi
-              platform to fund rescues in war zones.
+              crypto presale in 2025. Pet Fund unites Pet lovers on a SocialFi
+              platform To fund pet rescues in war zones.
             </motion.div>
             <motion.div
               className="w-4/5 relative flex flex-col justify-end pb-20 lg:pb-10 px-5 lg:px-0 gap-5"
@@ -1945,9 +1953,9 @@ export default function Header() {
           initial="hidden"
           animate="visible"
           variants={headerVariants}
-        // style={{
-        //   boxShadow: headerShadow,
-        // }}
+          // style={{
+          //   boxShadow: headerShadow,
+          // }}
         >
           <motion.div className="flex flex-row items-center justify-between px-3 sm:px-5 lg:px-20 py-3 bg-white">
             {/* Logo */}
@@ -1975,8 +1983,9 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(0)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -1985,8 +1994,9 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(1)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -1995,8 +2005,9 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => scrollToSection("section-tokenomics")}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2005,8 +2016,9 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(3)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2015,8 +2027,9 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(4)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2025,8 +2038,9 @@ export default function Header() {
                 <motion.div
                   variants={navItemVariants}
                   onClick={() => handleNavClick(5)}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2312,7 +2326,9 @@ export default function Header() {
                         <div className="text-2xl font-font-2-extra-bold mb-5">
                           {item.title}
                         </div>
-                        <div className="text-[18px]">{processAnswerText(item.answer)}</div>
+                        <div className="text-[18px]">
+                          {processAnswerText(item.answer)}
+                        </div>
                       </motion.div>
                     </div>
                   ))}
@@ -2322,11 +2338,19 @@ export default function Header() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="flex flex-col gap-2 items-center justify-center mt-5 text-white">
-                  <div className="uppercase font-font-2 text-2xl">Disclaimer</div>
-                  <div className="text-center uppercase font-font-2-bold">Always do your own research about the best crypto to buy, best ICO, or new cryptocurrency. Nothing here is financial advice.
+                  className="flex flex-col gap-2 items-center justify-center mt-5 text-white"
+                >
+                  <div className="uppercase font-font-2 text-2xl">
+                    Disclaimer
                   </div>
-                  <div className="text-center uppercase font-font-2-bold">© 2025 PET Fund. All rights reserved.</div>
+                  <div className="text-center uppercase font-font-2-bold">
+                    Always do your own research about the best crypto to buy,
+                    best ICO, or new cryptocurrency. Nothing here is financial
+                    advice.
+                  </div>
+                  <div className="text-center uppercase font-font-2-bold">
+                    © 2025 PET Fund. All rights reserved.
+                  </div>
                 </motion.div>
               </motion.div>
             </div>
@@ -2352,7 +2376,8 @@ export default function Header() {
               >
                 Whether during or after the <strong>$PETF</strong> presale, your
                 staking rewards will be based on your purchased allocation.
-                <br />Backed by real revenue, these rewards will be fully claimable
+                <br />
+                Backed by real revenue, these rewards will be fully claimable
                 once the claiming phase goes live.
               </motion.div>
               <motion.div
@@ -2553,17 +2578,19 @@ export default function Header() {
                               className="flex-1 flex justify-center"
                             >
                               <motion.div
-                                className={`w-full sm:max-w-[25%] max-w-[45%] rounded-t-full transition-all duration-300 ${item.highlighted
-                                  ? "bg-[#4AA76C] hover:bg-[#3a8959]"
-                                  : "bg-gray-400 hover:bg-gray-500"
-                                  } relative group`}
+                                className={`w-full sm:max-w-[25%] max-w-[45%] rounded-t-full transition-all duration-300 ${
+                                  item.highlighted
+                                    ? "bg-[#4AA76C] hover:bg-[#3a8959]"
+                                    : "bg-gray-400 hover:bg-gray-500"
+                                } relative group`}
                                 style={{
                                   height: `${height}px`,
                                   minHeight: "10px",
                                   originY: "bottom",
                                 }}
-                                title={`${item.date
-                                  }: ${item.value.toLocaleString()}`}
+                                title={`${
+                                  item.date
+                                }: ${item.value.toLocaleString()}`}
                                 variants={chartBarVariants}
                                 custom={index}
                                 whileHover={{ scale: 1.03 }}
@@ -2699,8 +2726,9 @@ export default function Header() {
                     handleNavClick(0);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 0 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2712,8 +2740,9 @@ export default function Header() {
                     handleNavClick(1);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 1 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2725,8 +2754,9 @@ export default function Header() {
                     scrollToSection("section-tokenomics");
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 2 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2738,8 +2768,9 @@ export default function Header() {
                     handleNavClick(3);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 3 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2751,8 +2782,9 @@ export default function Header() {
                     handleNavClick(4);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 4 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -2764,8 +2796,9 @@ export default function Header() {
                     handleNavClick(5);
                     setOpen(!open);
                   }}
-                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
-                    } cursor-pointer`}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 ${
+                    selectedOption === 5 ? "!text-white bg-[#4AA76C]" : ""
+                  } cursor-pointer`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

@@ -122,7 +122,7 @@ export default function B4() {
           </div>
           <AnimatedSection variant="fadeUp" delay={0.2}>
             <div className="font-font-2-extra-bold text-2xl text-center pb-10">
-              The $MEOWF token is the lifeblood of the Meow Fund ecosystem:
+              The $PETF token is the lifeblood of the Pet Fund ecosystem:
             </div>
           </AnimatedSection>
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 pb-10">
