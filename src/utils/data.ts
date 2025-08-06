@@ -73,13 +73,13 @@ const faqData = [
     id: 1,
     title: "What is Pet Fund?",
     answer:
-      "Pet Fund is a Web3 SocialFi platform for pet lovers, rewarding users for sharing anonymized insights about cat behavior. These insights are ethically sold to pet-related enterprises, with 20% of revenue used to fund rescue operations for cats in war-torn areas like Ukraine and Syria. Backed by a decade in Web2 data analytics, Pet Fund brings a proven, purpose-driven model into crypto.",
+      "Pet Fund is a Web3 SocialFi platform for pet lovers, rewarding users for sharing anonymized insights about pet behavior. These insights are ethically sold to pet-related enterprises, with 20% of revenue used to fund rescue operations for pets in war-torn areas like Ukraine and Syria. Backed by a decade in Web2 data analytics, Pet Fund brings a proven, purpose-driven model into crypto.",
   },
   {
     id: 2,
     title: "What are the benefits of holding $PETF",
     answer:
-      "$PETF holders gain access to multiple perks, including early participation in Meow Fund’s revenue-sharing program, staking rewards, and future platform utilities. By holding or staking $PETF, you’re not only earning—you’re helping save cats through a transparent, blockchain-powered rescue fund.",
+      "$PETF holders gain access to multiple perks, including early participation in Pet Fund’s revenue-sharing program, staking rewards, and future platform utilities. By holding or staking $PETF, you’re not only earning—you’re helping save pets through a transparent, blockchain-powered rescue fund.",
   },
   {
     id: 3,
@@ -89,24 +89,18 @@ const faqData = [
   },
   {
     id: 4,
-    title: "How do I stake my $PETF tokens?",
+    title: "I just bought $PETF, where are my tokens?",
     answer:
-      "You can stake $PETF directly through our Staking Page after claiming or purchasing your tokens. Staking unlocks access to revenue-sharing pools and boosts your long-term rewards. Early stakers gain priority access and potentially higher yields, so don’t wait too long!",
+      "Your tokens will be visible in your wallet when connected to the Pet Fund website. You can also check your staking dashboard if you've opted to stake them. If you purchased during presale or TGE, your tokens may be claimable at a designated time. ",
   },
   {
     id: 5,
-    title: "I just bought $PETF, where are my tokens?",
+    title: "How does Pet Fund generate revenue?",
     answer:
-      "Your tokens will be visible in your wallet when connected to the Meow Fund website. You can also check your staking dashboard if you've opted to stake them. If you purchased during presale or TGE, your tokens may be claimable at a designated time. Please stay tuned to official announcements on codatta.io or our Telegram and Discord for TGE details.",
+      "Pet Fund monetizes anonymized behavioral data shared by users. This data is sold ethically to pet food companies and related enterprises looking for consumer insight. A portion of this revenue goes back to users in the form of $PETF rewards, while 20% is committed to funding rescue missions for pets in high-risk zones.",
   },
   {
     id: 6,
-    title: "How does Pet Fund generate revenue?",
-    answer:
-      "Pet Fund monetizes anonymized behavioral data shared by users. This data is sold ethically to cat food companies and related enterprises looking for consumer insight. A portion of this revenue goes back to users in the form of $PETF rewards, while 20% is committed to funding rescue missions for pets in high-risk zones.",
-  },
-  {
-    id: 7,
     title: "Is Pet Fund just another meme token?",
     answer:
       "No. While Pet Fund embraces meme culture and community vibes, it’s backed by a serious and sustainable business model with real-world impact. Our team has a decade-long history in data analytics and has already generated millions in enterprise revenue. $PETF is built on real utility, social good, and a loyal pet-loving community.",

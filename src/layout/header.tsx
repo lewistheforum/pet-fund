@@ -1829,7 +1829,7 @@ export default function Header() {
   // Memoize the home content section
   const memoizedHomeContent = useMemo(
     () => (
-      <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-24 py-10 pt-10">
+      <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-[100px] py-10 pt-10">
         <motion.div
           className="grid grid-cols-1 gap-4 text-lg lg:text-[18px]"
           initial="hidden"
@@ -2141,7 +2141,7 @@ export default function Header() {
           {selectedOption === 0 && memoizedHomeContent}
 
           {selectedOption === 1 && (
-            <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-24 py-10 pt-10">
+            <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-[100px] py-10 pt-10">
               <motion.div
                 initial="initial"
                 animate="animate"
@@ -2150,7 +2150,7 @@ export default function Header() {
                 key="about"
               >
                 <motion.div
-                  className="text-white text-5xl font-font-2-extra-bold uppercase mb-14 w-full"
+                  className="text-white text-5xl font-font-2-extra-bold uppercase mb-7 w-full"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
@@ -2184,7 +2184,7 @@ export default function Header() {
           )}
 
           {selectedOption === 3 && (
-            <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-24 py-10 pt-10">
+            <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-[100px] py-10 pt-10">
               <motion.div
                 initial="initial"
                 animate="animate"
@@ -2279,7 +2279,7 @@ export default function Header() {
           )}
 
           {selectedOption === 4 && (
-            <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-24 py-10 pt-10 h-full">
+            <div className="col-span-12 lg:col-span-6 mx-auto relative px-5 lg:pr-[100px] py-10 pt-10 h-full">
               <motion.div
                 initial="initial"
                 animate="animate"
@@ -2288,7 +2288,7 @@ export default function Header() {
                 key="faq"
               >
                 <motion.div
-                  className="text-white text-5xl font-font-2-extra-bold uppercase mb-9 w-full"
+                  className="text-white text-5xl font-font-2-extra-bold uppercase mb-7 w-full"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
