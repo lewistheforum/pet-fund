@@ -2688,7 +2688,7 @@ export default function Header() {
       {/* Mobile Menu */}
       {open && (
         <motion.div
-          className="fixed top-0 left-0 bottom-0 right-0 h-full w-full bg-white shadow-md z-20"
+          className="fixed top-0 left-0 bottom-0 right-0 h-full w-screen bg-white shadow-md z-20"
           variants={mobileMenuVariants}
           initial="hidden"
           animate="visible"
@@ -2808,6 +2808,34 @@ export default function Header() {
                   whileTap={{ scale: 0.95 }}
                 >
                   [STAKING]
+                </motion.div>
+
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href={process.env.NEXT_PUBLIC_X_URL} target="_blank">
+                    [X]
+                  </Link>
+                </motion.div>
+
+                <motion.div
+                  variants={navItemVariants}
+                  onClick={() => {
+                    setOpen(!open);
+                  }}
+                  className={`text-black hover:bg-[#4AA76C] hover:text-white px-2 py-1 cursor-pointer`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href={process.env.NEXT_PUBLIC_TELE_URL} target="_blank">
+                    [TELEGRAM]
+                  </Link>
                 </motion.div>
               </motion.div>
             </motion.li>
