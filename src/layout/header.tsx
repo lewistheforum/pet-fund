@@ -54,6 +54,7 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import { parseEther, parseUnits, encodeFunctionData } from "viem";
+import Link from "next/link";
 
 // Token contract addresses
 const TOKEN_CONTRACTS = {
@@ -2112,14 +2113,18 @@ export default function Header() {
               whileHover="hover"
               className="cursor-pointer z-[60]"
             >
-              {svg.x()}
+              <Link href={process.env.NEXT_PUBLIC_X_URL} target="_blank">
+                {svg.x()}
+              </Link>
             </motion.div>
             <motion.div
               variants={featureIconVariants}
               whileHover="hover"
               className="cursor-pointer z-[60]"
             >
-              {svg.tele()}
+              <Link href={process.env.NEXT_PUBLIC_TELE_URL} target="_blank">
+                {svg.tele()}
+              </Link>
             </motion.div>
             <motion.div
               variants={featureIconVariants}
