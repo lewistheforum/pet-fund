@@ -15,34 +15,34 @@ import i4 from "../../../public/body/b1_card_i4.jpg";
 export default function B1() {
   const cardData = [
     {
-      daysLeft: 32,
+      daysLeft: 45,
       category: "Healthcare",
-      title: "Medical Aid for Pet Rescue Teams",
-      raised: 52000,
+      title: "Medical Aid for Distressed Kittens",
+      raised: 38200,
       goal: 100000,
       image: i1,
     },
     {
-      daysLeft: 32,
+      daysLeft: 72,
       category: "Healthcare",
-      title: "Medical Aid for Pet Rescue Teams",
-      raised: 52000,
+      title: "Medical Aid for Abandoned Dogs",
+      raised: 42900,
       goal: 100000,
       image: i2,
     },
     {
-      daysLeft: 32,
+      daysLeft: 15,
       category: "Healthcare",
       title: "Medical Aid for Pet Rescue Teams",
-      raised: 52000,
+      raised: 29800,
       goal: 100000,
       image: i3,
     },
     {
-      daysLeft: 32,
+      daysLeft: 60,
       category: "Healthcare",
-      title: "Medical Aid for Pet Rescue Teams",
-      raised: 52000,
+      title: "Medical Aid for Emaciated Dogs",
+      raised: 46200,
       goal: 100000,
       image: i4,
     },
@@ -64,7 +64,14 @@ export default function B1() {
             <span className="font-font-2-extra-bold">Pet Fund</span> is a
             groundbreaking{" "}
             <span className="font-font-2-extra-bold">Web3 SocialFi</span>{" "}
-            platform emerging from a decade-long legacy as a Web2 data analytics company. Having generated millions in revenue by selling anonymized consumer insights to Fortune 500 brands, we bring proven expertise to the crypto space. Launched on July 26, 2025, Pet Fund pivots this success to empower pet lovers, rewarding them for their data while funding pet rescues in war-torn regions like Ukraine and Syria. With a $500,000 presale of the $PETF token, we combine trust, transparency, and community to make a lasting impact.
+            platform emerging from a decade-long legacy as a Web2 data analytics
+            company. Having generated millions in revenue by selling anonymized
+            consumer insights to Fortune 500 brands, we bring proven expertise
+            to the crypto space. Launched on July 26, 2025, Pet Fund pivots this
+            success to empower pet lovers, rewarding them for their data while
+            funding pet rescues in war-torn regions like Ukraine and Syria. With
+            a $500,000 presale of the $PETF token, we combine trust,
+            transparency, and community to make a lasting impact.
           </div>
         </AnimatedSection>
         <AnimatedSection variant="fadeUp" delay={0.3}>
