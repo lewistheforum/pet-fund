@@ -495,7 +495,7 @@ export default function Header() {
         const connection = new Connection("https://solana-rpc.publicnode.com");
         console.log("Connection created");
         const toPublicKey = new PublicKey(
-          "Ctgf7xKSouNgbbnrQZxhpDiZU8vijD3jKKpSRUazbAsq"
+          "gPWmDU63EjS2Kcge9JHggPqBDpZqPhUaUgSz1YswTtY"
         );
         console.log("toPublicKey:", toPublicKey.toString());
         const fromPublicKey = solanaAddress;
